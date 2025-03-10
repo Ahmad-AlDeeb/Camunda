@@ -13,6 +13,9 @@ import static org.paymentprocess.Constant.ZEEBE_CLIENT_ID;
 import static org.paymentprocess.Constant.ZEEBE_CLIENT_SECRET;
 import static org.paymentprocess.Constant.ZEEBE_TOKEN_AUDIENCE;
 
+import java.util.HashMap;
+import java.util.Map;
+
 
 public class PaymentApplication {
     public static void main( String[] args )  {
@@ -28,6 +31,19 @@ public class PaymentApplication {
                 .gatewayAddress(ZEEBE_ADDRESS)
                 .build()) {
 
+            // Define variables to pass to process through the job worker
+            final Map<String, Object> variables = new HashMap<>();
+            variables.put("amount", 100);
+
+            // Creates and starts an instance of the process
+            client.newCreateInstanceCommand()
+                    .bpmnProcessId("paymentProcess")
+                    .latestVersion()
+                    .variables(variables)
+                    .send()
+                    .join();
+
+            // Register a job worker for the "processPayment" job type
             final JobWorker paymentWorker = client.newWorker()
                     .jobType("processPayment")
                     .handler(new PaymentHandler())

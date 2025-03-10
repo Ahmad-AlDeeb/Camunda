@@ -1,7 +1,7 @@
 package org.paymentprocess;
 
 public class PaymentService {
-    public void processPayment() {
-        System.out.println("One Payment Done! ✅");
+    public void processPayment(Integer amount) {
+        System.out.println("Payment of $" + amount + " processed successfully! ✅");
     }
 }
