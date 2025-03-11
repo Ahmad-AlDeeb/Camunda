@@ -30,9 +30,9 @@ public class PaymentApplication {
                 .gatewayAddress(ZEEBE_ADDRESS)
                 .build()) {
 
-            // Define variables for process
+            // Define variables to pass to process through the job worker
             final Map<String, Object> variables = new HashMap<>();
-            variables.put("amount", Double.valueOf(100.00));
+            variables.put("amount", (double) Double.valueOf(100.00));
 
             // Creates and starts an instance of the process
             client.newCreateInstanceCommand()
