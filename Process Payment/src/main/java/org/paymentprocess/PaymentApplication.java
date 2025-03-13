@@ -48,7 +48,7 @@ public class PaymentApplication {
                     .handler(new PaymentHandler())
                     .timeout(Duration.ofSeconds(10).toMillis())
                     .open();
-            Thread.sleep(100000);
+            Thread.sleep(10000);
 
         } catch (Exception e) {
             e.printStackTrace();
