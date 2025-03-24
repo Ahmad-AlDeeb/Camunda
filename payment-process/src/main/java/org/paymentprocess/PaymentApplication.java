@@ -15,6 +15,7 @@ import static org.paymentprocess.Constant.ZEEBE_TOKEN_AUDIENCE;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Scanner;
 
 
 public class PaymentApplication {
@@ -49,8 +50,12 @@ public class PaymentApplication {
                     .handler(new PaymentHandler())
                     .timeout(Duration.ofSeconds(10).toMillis())
                     .open();
-            Thread.sleep(100000);
 
+            // Terminate the worker with an Integer input
+            Scanner sc = new Scanner(System.in);
+            sc.nextInt();
+            sc.close();
+            paymentWorker.close();
         } catch (Exception e) {
             e.printStackTrace();
         }
