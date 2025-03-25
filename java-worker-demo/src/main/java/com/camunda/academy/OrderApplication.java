@@ -1,11 +1,6 @@
 package com.camunda.academy;
 
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.net.URI;
-import java.time.Duration;
 import java.util.Map;
-import java.util.Properties;
 import java.util.Scanner;
 
 import org.slf4j.Logger;
@@ -20,39 +15,28 @@ import io.camunda.zeebe.client.api.worker.JobWorker;
 import io.camunda.zeebe.client.impl.oauth.OAuthCredentialsProvider;
 import io.camunda.zeebe.client.impl.oauth.OAuthCredentialsProviderBuilder;
 
+import static com.camunda.academy.Constant.NUM_INSTANCES;
+import static com.camunda.academy.Constant.PROCESS_ID;
+import static com.camunda.academy.Constant.ZEEBE_ADDRESS;
+import static com.camunda.academy.Constant.ZEEBE_AUTHORIZATION_SERVER_URL;
+import static com.camunda.academy.Constant.ZEEBE_CLIENT_ID;
+import static com.camunda.academy.Constant.ZEEBE_CLIENT_SECRET;
+import static com.camunda.academy.Constant.ZEEBE_TOKEN_AUDIENCE;
+
 public class OrderApplication {
-
-    // Zeebe Client Credentials
-    private static final String ZEEBE_PROPERTIES_PATH = "src/main/resources/application.properties";
-    private static String ZEEBE_CLIENT_ID;
-    private static String ZEEBE_CLIENT_SECRET;
-    private static String ZEEBE_TOKEN_AUDIENCE;
-    private static String ZEEBE_REST_ADDRESS;
-    private static String ZEEBE_GRPC_ADDRESS;
-
     private static final Logger logger = LoggerFactory.getLogger(OrderApplication.class);
 
-    // Process instance creation
-    private static final String PROCESS_ID = "orderProcess";
-    private static final int NUM_INSTANCES = 1; // TOTAL NUMBER OF NEW PROCESS INSTANCES CREATED
-
-    // Worker configuration
-    private static final int WORKER_TIMEOUT = 1; // Set the time for how long a job is exclusively assigned for this worker.
-        
     public static void main(String[] args) {
-        loadProperties();
         final OAuthCredentialsProvider credentialsProvider = new OAuthCredentialsProviderBuilder()
-            .authorizationServerUrl("https://login.cloud.camunda.io/oauth/token")
+            .authorizationServerUrl(ZEEBE_AUTHORIZATION_SERVER_URL)
             .audience(ZEEBE_TOKEN_AUDIENCE)
             .clientId(ZEEBE_CLIENT_ID)
             .clientSecret(ZEEBE_CLIENT_SECRET)
             .build();
 
         try (final ZeebeClient client = ZeebeClient.newClientBuilder()
-                .grpcAddress(URI.create(ZEEBE_GRPC_ADDRESS))
-                .restAddress(URI.create(ZEEBE_REST_ADDRESS))
                 .credentialsProvider(credentialsProvider)
-                .gatewayAddress("aca23af5-a876-4304-a5f6-95f365ad4353.lhr-1.zeebe.camunda.io:443")
+                .gatewayAddress(ZEEBE_ADDRESS)
                 .build()) {
 
             // Process Instance creator looper
@@ -101,20 +85,5 @@ public class OrderApplication {
             logger.info("Process instance: {} started", event.getProcessInstanceKey());
         }
         logger.info("Ending: " + numInstances + " instances created for process: " + PROCESS_ID);
-    }
-
-    private static void loadProperties() {
-        Properties properties = new Properties();
-        try (FileInputStream input = new FileInputStream(ZEEBE_PROPERTIES_PATH)) {
-            properties.load(input); 
-            ZEEBE_CLIENT_ID = properties.getProperty("zeebe.client.cloud.clientId");
-			ZEEBE_CLIENT_SECRET = properties.getProperty("zeebe.client.cloud.clientSecret");
-			ZEEBE_REST_ADDRESS = properties.getProperty("ZEEBE_REST_ADDRESS");
-    		ZEEBE_GRPC_ADDRESS = properties.getProperty("ZEEBE_GRPC_ADDRESS");
-			ZEEBE_TOKEN_AUDIENCE = properties.getProperty("ZEEBE_TOKEN_AUDIENCE");
-        
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
     }
 }
