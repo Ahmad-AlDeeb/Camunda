@@ -1,4 +1,4 @@
-package com.deeb.hiring_process;
+package com.deeb.hiringprocess;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -8,7 +8,7 @@ public class HiringProcessApplication {
 
 	public static void main(String[] args) {
 		SpringApplication.run(HiringProcessApplication.class, args);
-		
+
 	}
 
 }

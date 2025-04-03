@@ -1,4 +1,4 @@
-package com.deeb.hiring_process;
+package com.deeb.hiringprocess;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
