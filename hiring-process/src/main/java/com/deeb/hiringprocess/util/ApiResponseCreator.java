@@ -1,5 +1,7 @@
 package com.deeb.hiringprocess.util;
 
+import com.deeb.hiringprocess.entity.ApiResponse;
+
 import static com.deeb.hiringprocess.Constant.ExceptionConstant.UTILITY_CLASS_INSTANTIATION_MESSAGE;
 
 public final class ApiResponseCreator {
