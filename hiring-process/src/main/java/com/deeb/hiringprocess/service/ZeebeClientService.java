@@ -6,6 +6,8 @@ import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestClient;
 
+import java.util.Map;
+
 import static com.deeb.hiringprocess.Constant.CamundaConstant.ZEEBE_REST_ADDRESS;
 
 @Component
@@ -18,11 +20,11 @@ public class ZeebeClientService {
                 .build();
     }
 
-    public ApiResponse<ProcessInstance> startProcessInstance(String authToken, String processDefinitionId) {
+    public ApiResponse<ProcessInstance> startProcessInstance(String authToken, Map<String, Object> requestBody) {
         return restClient.post()
-                .uri("/process-instances")
-                .header("Authorization", authToken)
-                .body(processDefinitionId)
+                .uri("/v2/process-instances")
+                .header("Authorization", "Bearer " + authToken)
+                .body(requestBody)
                 .retrieve()
                 .body(new ParameterizedTypeReference<>(){});
     }
