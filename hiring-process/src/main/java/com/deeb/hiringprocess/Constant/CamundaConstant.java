@@ -15,8 +15,7 @@ public final class CamundaConstant {
     public static final String ZEEBE_AUTHORIZATION_SERVER_URL = dotenv.get("ZEEBE_AUTHORIZATION_SERVER_URL");
     public static final String ZEEBE_TOKEN_AUDIENCE = dotenv.get("ZEEBE_TOKEN_AUDIENCE");
 
-//    public static final String PROCESS_DEFINITION_ID = "Process_Hiring";
-    public static final String PROCESS_DEFINITION_ID = "SendJokeProcess";
+    public static final String PROCESS_DEFINITION_ID = "Process_Hiring";
 
     private CamundaConstant() {
         throw new IllegalStateException(UTILITY_CLASS_INSTANTIATION_MESSAGE);

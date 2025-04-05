@@ -7,5 +7,5 @@ public record ProcessInstance(
         String processDefinitionId,
         Integer processDefinitionVersion,
         String tenantId,
-        Map<String, String> variables
+        Map<String, Object> variables
 ) {}

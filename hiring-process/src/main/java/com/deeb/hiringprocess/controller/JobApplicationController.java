@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import static com.deeb.hiringprocess.Constant.ApiResponseConstant.RESOURCE_CREATED;
+import static com.deeb.hiringprocess.util.ApiResponseCreator.createUnifiedResponse;
 import static java.lang.String.format;
 import static org.springframework.http.HttpStatus.CREATED;
 
@@ -26,6 +27,6 @@ public class JobApplicationController {
     @PostMapping
     public ApiResponse<JobApplication> create(@RequestBody JobApplication jobApplication) {
         jobApplicationService.create(jobApplication);
-        return new ApiResponse<>(CREATED.value(), format(RESOURCE_CREATED, RESOURCE_NAME), jobApplication);
+        return createUnifiedResponse(CREATED.value(), format(RESOURCE_CREATED, RESOURCE_NAME), jobApplication);
     }
 }
