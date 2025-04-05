@@ -9,6 +9,7 @@ public final class CamundaConstant {
 
     public static final String ZEEBE_REST_ADDRESS = dotenv.get("ZEEBE_REST_ADDRESS");
     public static final String ZEEBE_TOKEN = dotenv.get("ZEEBE_TOKEN");
+    public static final String TASKLIST_TOKEN = dotenv.get("TASKLIST_TOKEN");
     public static final String ZEEBE_ADDRESS = dotenv.get("ZEEBE_ADDRESS");
     public static final String ZEEBE_CLIENT_ID = dotenv.get("ZEEBE_CLIENT_ID");
     public static final String ZEEBE_CLIENT_SECRET = dotenv.get("ZEEBE_CLIENT_SECRET");
