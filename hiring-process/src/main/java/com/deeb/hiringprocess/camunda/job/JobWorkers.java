@@ -65,4 +65,21 @@ public class JobWorkers {
             }
         }
     }
+
+    @Async
+    public void saveApplication() throws Exception {
+        Map<String, Object> requestBody =
+                RequestBodyBuilder.activateJobs("SaveApplicationToHrSystem", 10000, 1);
+
+        while (true) {
+            List<Job> jobs = zeebeClient.activateJobs(ZEEBE_TOKEN, requestBody).jobs();
+
+            if (jobs.isEmpty()) {
+                Thread.sleep(1000);
+            }
+            else {
+                jobApplicationService.saveApplication(jobs.getFirst());
+            }
+        }
+    }
 }

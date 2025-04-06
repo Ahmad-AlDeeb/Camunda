@@ -23,5 +23,6 @@ public class HiringProcessApplication implements CommandLineRunner {
 	public void run(String... args) throws Exception {
 		jobWorkers.calculateCvScore();
 		jobWorkers.scheduleInterview();
+		jobWorkers.saveApplication();
 	}
 }
