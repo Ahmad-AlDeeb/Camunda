@@ -1,4 +1,4 @@
-package com.deeb.hiringprocess.entity;
+package com.deeb.hiringprocess.util;
 
 public record ApiResponse<T>(int statusCode, String message, T body) {
 }

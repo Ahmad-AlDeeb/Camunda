@@ -1,21 +1,27 @@
 package com.deeb.hiringprocess;
 
-import com.deeb.hiringprocess.service.JobApplicationService;
+import com.deeb.hiringprocess.camunda.job.JobWorkers;
+import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-
-import java.util.concurrent.CompletableFuture;
+import org.springframework.scheduling.annotation.EnableAsync;
 
 @SpringBootApplication
-public class HiringProcessApplication {
-	public static void main(String[] args) {
+@EnableAsync
+public class HiringProcessApplication implements CommandLineRunner {
+	private final JobWorkers jobWorkers;
+
+    public HiringProcessApplication(JobWorkers jobWorkers) {
+        this.jobWorkers = jobWorkers;
+    }
+
+    public static void main(String[] args) {
 		SpringApplication.run(HiringProcessApplication.class, args);
-		CompletableFuture.runAsync(() -> {
-			try {
-				JobApplicationService.calculateCvScore();
-			} catch (Exception e) {
-				throw new RuntimeException(e);
-			}
-		});
+	}
+
+	@Override
+	public void run(String... args) throws Exception {
+		jobWorkers.calculateCvScore();
+		jobWorkers.scheduleInterview();
 	}
 }

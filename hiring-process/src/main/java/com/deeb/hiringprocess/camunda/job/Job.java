@@ -1,4 +1,4 @@
-package com.deeb.hiringprocess.entity;
+package com.deeb.hiringprocess.camunda.job;
 
 import java.util.Map;
 
