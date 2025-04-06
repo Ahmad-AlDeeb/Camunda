@@ -1,4 +1,4 @@
-package com.deeb.hiringprocess.entity;
+package com.deeb.hiringprocess.camunda.process;
 import java.util.Map;
 
 public record ProcessInstance(

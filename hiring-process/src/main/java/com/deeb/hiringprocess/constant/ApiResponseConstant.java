@@ -1,6 +1,6 @@
-package com.deeb.hiringprocess.Constant;
+package com.deeb.hiringprocess.constant;
 
-import static com.deeb.hiringprocess.Constant.ExceptionConstant.UTILITY_CLASS_INSTANTIATION_MESSAGE;
+import static com.deeb.hiringprocess.constant.ExceptionConstant.UTILITY_CLASS_INSTANTIATION_MESSAGE;
 
 public final class ApiResponseConstant {
     public static final String RESOURCE_CREATED = "%s created!";
