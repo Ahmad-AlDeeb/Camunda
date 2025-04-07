@@ -14,9 +14,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import static com.deeb.hiringprocess.constant.CamundaConstant.OPERATE_TOKEN;
-import static com.deeb.hiringprocess.constant.CamundaConstant.ZEEBE_TOKEN;
-
 @Component
 public class JobWorkers {
     private final ZeebeClient zeebeClient;
@@ -35,12 +32,11 @@ public class JobWorkers {
                 RequestBodyBuilder.activateJobs("CalculateCvScore", 10000, 1);
 
         while (true) {
-            List<Job> jobs = zeebeClient.activateJobs(ZEEBE_TOKEN, requestBody).jobs();
+            List<Job> jobs = zeebeClient.activateJobs(requestBody).jobs();
 
             if (jobs.isEmpty()) {
                 Thread.sleep(1000);
-            }
-            else {
+            } else {
                 jobApplicationService.calculateCvScore(jobs.getFirst());
             }
         }
@@ -53,12 +49,11 @@ public class JobWorkers {
 
         Set<Long> completedTaskKeys = new HashSet<>();
         while (true) {
-            List<FlowNode> flowNodes = operateClient.searchFlowNodes(OPERATE_TOKEN, requestBody).items();
+            List<FlowNode> flowNodes = operateClient.searchFlowNodes(requestBody).items();
 
             if (flowNodes.isEmpty() || completedTaskKeys.contains(flowNodes.getFirst().key() + 1)) {
                 Thread.sleep(3000);
-            }
-            else {
+            } else {
                 Long userTaskKey = flowNodes.getFirst().key() + 1;
                 completedTaskKeys.add(userTaskKey);
                 jobApplicationService.scheduleInterview(userTaskKey);
@@ -69,16 +64,69 @@ public class JobWorkers {
     @Async
     public void saveApplication() throws Exception {
         Map<String, Object> requestBody =
-                RequestBodyBuilder.activateJobs("SaveApplicationToHrSystem", 10000, 1);
+                RequestBodyBuilder.activateJobs("SaveApplication", 10000, 1);
 
         while (true) {
-            List<Job> jobs = zeebeClient.activateJobs(ZEEBE_TOKEN, requestBody).jobs();
+            List<Job> jobs = zeebeClient.activateJobs(requestBody).jobs();
 
             if (jobs.isEmpty()) {
                 Thread.sleep(1000);
-            }
-            else {
+            } else {
                 jobApplicationService.saveApplication(jobs.getFirst());
+            }
+        }
+    }
+
+    @Async
+    public void doInterview() throws Exception {
+        Map<String, Object> requestBody =
+                RequestBodyBuilder.searchFlowNodes("Activity_DoInterview", FlowNodeState.ACTIVE);
+
+        Set<Long> completedTaskKeys = new HashSet<>();
+        while (true) {
+            List<FlowNode> flowNodes = operateClient.searchFlowNodes(requestBody).items();
+
+            if (flowNodes.isEmpty() || completedTaskKeys.contains(flowNodes.getFirst().key() + 1)) {
+                Thread.sleep(3000);
+            } else {
+                Long userTaskKey = flowNodes.getFirst().key() + 1;
+                completedTaskKeys.add(userTaskKey);
+                jobApplicationService.doInterview(userTaskKey);
+            }
+        }
+    }
+
+    @Async
+    public void submitApplicantResponse() throws Exception {
+        Map<String, Object> requestBody =
+                RequestBodyBuilder.searchFlowNodes("Activity_SubmitApplicantResponse", FlowNodeState.ACTIVE);
+
+        Set<Long> completedTaskKeys = new HashSet<>();
+        while (true) {
+            List<FlowNode> flowNodes = operateClient.searchFlowNodes(requestBody).items();
+
+            if (flowNodes.isEmpty() || completedTaskKeys.contains(flowNodes.getFirst().key() + 1)) {
+                Thread.sleep(3000);
+            } else {
+                Long userTaskKey = flowNodes.getFirst().key() + 1;
+                completedTaskKeys.add(userTaskKey);
+                jobApplicationService.submitApplicantResponse(userTaskKey);
+            }
+        }
+    }
+
+    @Async
+    public void updateApplication() throws Exception {
+        Map<String, Object> requestBody =
+                RequestBodyBuilder.activateJobs("UpdateApplication", 10000, 1);
+
+        while (true) {
+            List<Job> jobs = zeebeClient.activateJobs(requestBody).jobs();
+
+            if (jobs.isEmpty()) {
+                Thread.sleep(1000);
+            } else {
+                jobApplicationService.updateApplication(jobs.getFirst());
             }
         }
     }
