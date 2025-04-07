@@ -1,4 +1,5 @@
 package com.deeb.hiringprocess.camunda.process;
+
 import java.util.Map;
 
 public record ProcessInstance(
@@ -8,4 +9,5 @@ public record ProcessInstance(
         Integer processDefinitionVersion,
         String tenantId,
         Map<String, Object> variables
-) {}
+) {
+}

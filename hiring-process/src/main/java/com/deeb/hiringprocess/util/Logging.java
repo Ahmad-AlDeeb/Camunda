@@ -16,12 +16,15 @@ import static com.deeb.hiringprocess.constant.LoggingConstant.BEFORE_MESSAGE;
 @Component
 public class Logging {
     private static final Logger LOGGER = LoggerFactory.getLogger(Logging.class);
+
     private static String getClassName(JoinPoint joinPoint) {
         return joinPoint.getSignature().getDeclaringTypeName();
     }
+
     private static String getMethodName(JoinPoint joinPoint) {
         return joinPoint.getSignature().toShortString();
     }
+
     private static StringBuilder getMethodArgs(JoinPoint joinPoint) {
         Object[] args = joinPoint.getArgs();
         StringBuilder argsString = new StringBuilder();

@@ -11,4 +11,5 @@ public record FlowNode(
         FlowNodeState state,
         boolean incident,
         String tenantId
-) {}
+) {
+}
