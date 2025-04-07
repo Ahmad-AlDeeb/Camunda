@@ -1,4 +1,4 @@
-package com.deeb.hiringprocess.constant;
+package com.deeb.hiringprocess.camunda;
 
 import io.github.cdimascio.dotenv.Dotenv;
 

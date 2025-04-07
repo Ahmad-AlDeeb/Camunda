@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service;
 import java.util.HashMap;
 import java.util.Map;
 
-import static com.deeb.hiringprocess.constant.CamundaConstant.PROCESS_DEFINITION_ID;
+import static com.deeb.hiringprocess.camunda.CamundaConstant.PROCESS_DEFINITION_ID;
 import static java.lang.String.format;
 
 @Service

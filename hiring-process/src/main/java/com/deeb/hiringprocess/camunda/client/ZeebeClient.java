@@ -1,15 +1,15 @@
 package com.deeb.hiringprocess.camunda.client;
 
 import com.deeb.hiringprocess.camunda.job.ActivatedJobs;
-import com.deeb.hiringprocess.camunda.process.ProcessInstance;
+import com.deeb.hiringprocess.camunda.ProcessInstance;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestClient;
 
 import java.util.Map;
 
-import static com.deeb.hiringprocess.constant.CamundaConstant.ZEEBE_REST_ADDRESS;
-import static com.deeb.hiringprocess.constant.CamundaConstant.ZEEBE_TOKEN;
+import static com.deeb.hiringprocess.camunda.CamundaConstant.ZEEBE_REST_ADDRESS;
+import static com.deeb.hiringprocess.camunda.CamundaConstant.ZEEBE_TOKEN;
 
 @Component
 public class ZeebeClient {

@@ -6,8 +6,8 @@ import org.springframework.web.client.RestClient;
 
 import java.util.Map;
 
-import static com.deeb.hiringprocess.constant.CamundaConstant.OPERATE_BASE_URL;
-import static com.deeb.hiringprocess.constant.CamundaConstant.OPERATE_TOKEN;
+import static com.deeb.hiringprocess.camunda.CamundaConstant.OPERATE_BASE_URL;
+import static com.deeb.hiringprocess.camunda.CamundaConstant.OPERATE_TOKEN;
 
 @Component
 public class OperateClient {
