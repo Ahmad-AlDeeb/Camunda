@@ -16,13 +16,13 @@ public class OperateClient {
     public OperateClient() {
         restClient = RestClient.builder()
                 .baseUrl(OPERATE_BASE_URL)
+                .defaultHeader("Authorization", "Bearer " + OPERATE_TOKEN)
                 .build();
     }
 
     public FoundFlowNodes searchFlowNodes(Map<String, Object> requestBody) {
         return restClient.post()
                 .uri("/v1/flownode-instances/search")
-                .header("Authorization", "Bearer " + OPERATE_TOKEN)
                 .body(requestBody)
                 .retrieve()
                 .body(FoundFlowNodes.class);

@@ -18,13 +18,13 @@ public class ZeebeClient {
     public ZeebeClient() {
         restClient = RestClient.builder()
                 .baseUrl(ZEEBE_REST_ADDRESS)
+                .defaultHeader("Authorization", "Bearer " + ZEEBE_TOKEN)
                 .build();
     }
 
     public ProcessInstance startProcessInstance(Map<String, Object> requestBody) {
         return restClient.post()
                 .uri("/v2/process-instances")
-                .header("Authorization", "Bearer " + ZEEBE_TOKEN)
                 .body(requestBody)
                 .retrieve()
                 .body(ProcessInstance.class);
@@ -33,7 +33,6 @@ public class ZeebeClient {
     public ActivatedJobs activateJobs(Map<String, Object> requestBody) {
         return restClient.post()
                 .uri("/v2/jobs/activation")
-                .header("Authorization", "Bearer " + ZEEBE_TOKEN)
                 .body(requestBody)
                 .retrieve()
                 .body(ActivatedJobs.class);
@@ -42,7 +41,6 @@ public class ZeebeClient {
     public void completeJob(Long jobKey, Map<String, Object> requestBody) {
         restClient.post()
                 .uri("/v2/jobs/{jobKey}/completion", jobKey)
-                .header("Authorization", "Bearer " + ZEEBE_TOKEN)
                 .body(requestBody)
                 .retrieve()
                 .body(new ParameterizedTypeReference<>() {
@@ -52,7 +50,6 @@ public class ZeebeClient {
     public void completeUserTask(Long userTaskKey, Map<String, Object> requestBody) throws Exception {
         restClient.post()
                 .uri("/v2/user-tasks/{userTaskKey}/completion", userTaskKey)
-                .header("Authorization", "Bearer " + ZEEBE_TOKEN)
                 .body(requestBody)
                 .retrieve()
                 .body(new ParameterizedTypeReference<>() {
