@@ -9,23 +9,23 @@ import org.springframework.scheduling.annotation.EnableAsync;
 @SpringBootApplication
 @EnableAsync
 public class HiringProcessApplication implements CommandLineRunner {
-	private final JobWorkers jobWorkers;
+    private final JobWorkers jobWorkers;
 
     public HiringProcessApplication(JobWorkers jobWorkers) {
         this.jobWorkers = jobWorkers;
     }
 
     public static void main(String[] args) {
-		SpringApplication.run(HiringProcessApplication.class, args);
-	}
+        SpringApplication.run(HiringProcessApplication.class, args);
+    }
 
-	@Override
-	public void run(String... args) throws Exception {
-		jobWorkers.calculateCvScore();
-		jobWorkers.scheduleInterview();
-		jobWorkers.saveApplication();
-		jobWorkers.doInterview();
-		jobWorkers.submitApplicantResponse();
-		jobWorkers.updateApplication();
-	}
+    @Override
+    public void run(String... args) throws Exception {
+        jobWorkers.calculateCvScore();
+        jobWorkers.scheduleInterview();
+        jobWorkers.saveApplication();
+        jobWorkers.doInterview();
+        jobWorkers.submitApplicantResponse();
+        jobWorkers.updateApplication();
+    }
 }

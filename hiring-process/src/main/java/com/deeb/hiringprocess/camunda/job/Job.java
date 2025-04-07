@@ -17,4 +17,5 @@ public record Job(
         long deadline,
         Map<String, Object> variables,
         String tenantId
-) {}
+) {
+}

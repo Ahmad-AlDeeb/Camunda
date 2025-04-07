@@ -1,9 +1,9 @@
 package com.deeb.hiringprocess.camunda.job;
 
-import com.deeb.hiringprocess.camunda.flownode.FlowNode;
-import com.deeb.hiringprocess.camunda.flownode.FlowNodeState;
 import com.deeb.hiringprocess.camunda.client.OperateClient;
 import com.deeb.hiringprocess.camunda.client.ZeebeClient;
+import com.deeb.hiringprocess.camunda.flownode.FlowNode;
+import com.deeb.hiringprocess.camunda.flownode.FlowNodeState;
 import com.deeb.hiringprocess.service.JobApplicationService;
 import com.deeb.hiringprocess.util.RequestBodyBuilder;
 import org.springframework.scheduling.annotation.Async;
@@ -20,7 +20,8 @@ public class JobWorkers {
     private final OperateClient operateClient;
     private final JobApplicationService jobApplicationService;
 
-    public JobWorkers(ZeebeClient zeebeClient, OperateClient operateClient, JobApplicationService jobApplicationService) {
+    public JobWorkers(
+            ZeebeClient zeebeClient, OperateClient operateClient, JobApplicationService jobApplicationService) {
         this.zeebeClient = zeebeClient;
         this.operateClient = operateClient;
         this.jobApplicationService = jobApplicationService;

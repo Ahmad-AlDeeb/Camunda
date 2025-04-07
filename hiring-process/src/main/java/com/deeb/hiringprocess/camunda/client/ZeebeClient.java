@@ -1,7 +1,7 @@
 package com.deeb.hiringprocess.camunda.client;
 
-import com.deeb.hiringprocess.camunda.process.ProcessInstance;
 import com.deeb.hiringprocess.camunda.job.ActivatedJobs;
+import com.deeb.hiringprocess.camunda.process.ProcessInstance;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestClient;
@@ -45,7 +45,8 @@ public class ZeebeClient {
                 .header("Authorization", "Bearer " + ZEEBE_TOKEN)
                 .body(requestBody)
                 .retrieve()
-                .body(new ParameterizedTypeReference<>(){});
+                .body(new ParameterizedTypeReference<>() {
+                });
     }
 
     public void completeUserTask(Long userTaskKey, Map<String, Object> requestBody) throws Exception {
@@ -54,6 +55,7 @@ public class ZeebeClient {
                 .header("Authorization", "Bearer " + ZEEBE_TOKEN)
                 .body(requestBody)
                 .retrieve()
-                .body(new ParameterizedTypeReference<>(){});
+                .body(new ParameterizedTypeReference<>() {
+                });
     }
 }
