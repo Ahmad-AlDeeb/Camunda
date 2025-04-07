@@ -7,6 +7,7 @@ import org.springframework.web.client.RestClient;
 import java.util.Map;
 
 import static com.deeb.hiringprocess.constant.CamundaConstant.OPERATE_BASE_URL;
+import static com.deeb.hiringprocess.constant.CamundaConstant.OPERATE_TOKEN;
 
 @Component
 public class OperateClient {
@@ -18,10 +19,10 @@ public class OperateClient {
                 .build();
     }
 
-    public FoundFlowNodes searchFlowNodes(String authToken, Map<String, Object> requestBody) {
+    public FoundFlowNodes searchFlowNodes(Map<String, Object> requestBody) {
         return restClient.post()
                 .uri("/v1/flownode-instances/search")
-                .header("Authorization", "Bearer " + authToken)
+                .header("Authorization", "Bearer " + OPERATE_TOKEN)
                 .body(requestBody)
                 .retrieve()
                 .body(FoundFlowNodes.class);

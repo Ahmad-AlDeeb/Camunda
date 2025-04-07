@@ -10,7 +10,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 import static com.deeb.hiringprocess.constant.CamundaConstant.PROCESS_DEFINITION_ID;
-import static com.deeb.hiringprocess.constant.CamundaConstant.ZEEBE_TOKEN;
 import static java.lang.String.format;
 
 @Service
@@ -25,7 +24,7 @@ public class JobApplicationService {
         Map<String, Object> requestBody =
                 RequestBodyBuilder.startProcessInstance(PROCESS_DEFINITION_ID, jobApplication);
 
-        zeebeClient.startProcessInstance(ZEEBE_TOKEN, requestBody);
+        zeebeClient.startProcessInstance(requestBody);
     }
 
     public void calculateCvScore(Job job) {
@@ -33,13 +32,15 @@ public class JobApplicationService {
         Map<String, Object> requestBody = RequestBodyBuilder.completeJob(Map.of("score", 95));
 
         System.out.println(format("Calculating %s's CV score... 🔃", job.variables().get("name")));
-        zeebeClient.completeJob(ZEEBE_TOKEN, jobKey, requestBody);
+        zeebeClient.completeJob(jobKey, requestBody);
         System.out.println("CV score calculated. ✅");
     }
 
     public void scheduleInterview(Long userTaskKey) throws Exception {
+        Map<String, Object> requestBody = RequestBodyBuilder.completeJob(Map.of("isInterested", "yes"));
+
         System.out.println("Scheduling interview... 🔃");
-        zeebeClient.completeUserTask(ZEEBE_TOKEN, userTaskKey);
+        zeebeClient.completeUserTask(userTaskKey, requestBody);
         System.out.println("Interview scheduled. ✅");
     }
 
@@ -47,7 +48,33 @@ public class JobApplicationService {
         Long jobKey = job.jobKey();
 
         System.out.println(format("Saving %s's Job Application... 🔃", job.variables().get("name")));
-        zeebeClient.completeJob(ZEEBE_TOKEN, jobKey, new HashMap<>());
+        zeebeClient.completeJob(jobKey, new HashMap<>());
         System.out.println("Job Application Saved. ✅");
+    }
+
+    public void doInterview(Long userTaskKey) throws Exception {
+        Map<String, Object> requestBody = RequestBodyBuilder.completeJob(Map.of("isFit", "yes"));
+
+        System.out.println("Doing interview... 🔃");
+        zeebeClient.completeUserTask(userTaskKey, requestBody);
+        System.out.println("Interview done. ✅");
+    }
+
+    public void submitApplicantResponse(Long userTaskKey) throws Exception {
+        Map<String, Object> requestBody = RequestBodyBuilder.completeJob(Map.of("isOfferAccepted", "yes"));
+
+        System.out.println("Submitting applicant's response... 🔃");
+        zeebeClient.completeUserTask(userTaskKey, requestBody);
+        System.out.println("Applicant's response submitted. ✅");
+    }
+
+    public void updateApplication(Job job) {
+        Long jobKey = job.jobKey();
+        String name = (String) job.variables().get("name");
+        String status = (String) job.variables().get("status");
+
+        System.out.println(format("Updating %s's application status... 🔃", name));
+        zeebeClient.completeJob(jobKey, new HashMap<>());
+        System.out.println(format("%s was %s!!!", name, status));
     }
 }

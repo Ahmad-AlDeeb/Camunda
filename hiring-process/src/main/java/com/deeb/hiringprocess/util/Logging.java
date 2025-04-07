@@ -36,7 +36,7 @@ public class Logging {
         return argsString;
     }
 
-    @Around("execution(* com.deeb.hiringprocess.*.*.*.*(..))")
+    @Around("execution(* com.deeb.hiringprocess.*.*.*(..))")
     public Object log(ProceedingJoinPoint joinPoint) throws Throwable {
         String className = getClassName(joinPoint);
         String methodName = getMethodName(joinPoint);

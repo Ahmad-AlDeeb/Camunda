@@ -24,5 +24,8 @@ public class HiringProcessApplication implements CommandLineRunner {
 		jobWorkers.calculateCvScore();
 		jobWorkers.scheduleInterview();
 		jobWorkers.saveApplication();
+		jobWorkers.doInterview();
+		jobWorkers.submitApplicantResponse();
+		jobWorkers.updateApplication();
 	}
 }
