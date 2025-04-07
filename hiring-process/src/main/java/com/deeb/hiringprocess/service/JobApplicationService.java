@@ -4,6 +4,7 @@ import com.deeb.hiringprocess.camunda.client.ZeebeClient;
 import com.deeb.hiringprocess.camunda.job.Job;
 import com.deeb.hiringprocess.entity.JobApplication;
 import com.deeb.hiringprocess.util.RequestBodyBuilder;
+import com.deeb.hiringprocess.util.WhatsappClient;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
@@ -15,9 +16,11 @@ import static java.lang.String.format;
 @Service
 public class JobApplicationService {
     private final ZeebeClient zeebeClient;
+    private final WhatsappClient whatsappClient;
 
-    public JobApplicationService(ZeebeClient zeebeClient) {
+    public JobApplicationService(ZeebeClient zeebeClient, WhatsappClient whatsappClient) {
         this.zeebeClient = zeebeClient;
+        this.whatsappClient = whatsappClient;
     }
 
     public void create(JobApplication jobApplication) {
@@ -66,6 +69,15 @@ public class JobApplicationService {
         System.out.println("Submitting applicant's response... 🔃");
         zeebeClient.completeUserTask(userTaskKey, requestBody);
         System.out.println("Applicant's response submitted. ✅");
+    }
+
+    public void sendOnboardingDetails(Job job) throws Exception {
+        Long jobKey = job.jobKey();
+
+        System.out.println(format("Sending onboarding details to %s... 🔃", job.variables().get("name")));
+        whatsappClient.sendMessage();
+        zeebeClient.completeJob(jobKey, new HashMap<>());
+        System.out.println("Onboarding details sent. ✅");
     }
 
     public void updateApplication(Job job) {

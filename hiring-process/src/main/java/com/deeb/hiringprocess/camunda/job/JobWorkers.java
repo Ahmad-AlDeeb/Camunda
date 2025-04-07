@@ -6,6 +6,7 @@ import com.deeb.hiringprocess.camunda.flownode.FlowNode;
 import com.deeb.hiringprocess.camunda.flownode.FlowNodeState;
 import com.deeb.hiringprocess.service.JobApplicationService;
 import com.deeb.hiringprocess.util.RequestBodyBuilder;
+import com.deeb.hiringprocess.util.WhatsappClient;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 
@@ -19,6 +20,7 @@ public class JobWorkers {
     private final ZeebeClient zeebeClient;
     private final OperateClient operateClient;
     private final JobApplicationService jobApplicationService;
+
 
     public JobWorkers(
             ZeebeClient zeebeClient, OperateClient operateClient, JobApplicationService jobApplicationService) {
@@ -112,6 +114,22 @@ public class JobWorkers {
                 Long userTaskKey = flowNodes.getFirst().key() + 1;
                 completedTaskKeys.add(userTaskKey);
                 jobApplicationService.submitApplicantResponse(userTaskKey);
+            }
+        }
+    }
+
+    @Async
+    public void sendOnboardingDetails() throws Exception {
+        Map<String, Object> requestBody =
+                RequestBodyBuilder.activateJobs("sendOnboardingDetails", 10000, 1);
+
+        while (true) {
+            List<Job> jobs = zeebeClient.activateJobs(requestBody).jobs();
+
+            if (jobs.isEmpty()) {
+                Thread.sleep(1000);
+            } else {
+                jobApplicationService.sendOnboardingDetails(jobs.getFirst());
             }
         }
     }
