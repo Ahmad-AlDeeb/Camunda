@@ -1,6 +1,5 @@
 package com.deeb.hiringprocess.util;
 
-import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestClient;
 
@@ -20,8 +19,8 @@ public class WhatsappClient {
                 .build();
     }
 
-    public String sendMessage() {
-        return restClient.post()
+    public void sendMessage() {
+        restClient.post()
                 .uri("/messages")
                 .body(REQUEST_BODY)
                 .retrieve()
