@@ -117,6 +117,22 @@ public class JobWorkers {
     }
 
     @Async
+    public void sendOnboardingDetails() throws Exception {
+        Map<String, Object> requestBody =
+                RequestBodyBuilder.activateJobs("sendOnboardingDetails", 10000, 1);
+
+        while (true) {
+            List<Job> jobs = zeebeClient.activateJobs(requestBody).jobs();
+
+            if (jobs.isEmpty()) {
+                Thread.sleep(1000);
+            } else {
+                jobApplicationService.sendOnboardingDetails(jobs.getFirst());
+            }
+        }
+    }
+
+    @Async
     public void updateApplication() throws Exception {
         Map<String, Object> requestBody =
                 RequestBodyBuilder.activateJobs("UpdateApplication", 10000, 1);

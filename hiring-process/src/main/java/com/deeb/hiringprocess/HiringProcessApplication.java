@@ -26,6 +26,7 @@ public class HiringProcessApplication implements CommandLineRunner {
         jobWorkers.saveApplication();
         jobWorkers.doInterview();
         jobWorkers.submitApplicantResponse();
+        jobWorkers.sendOnboardingDetails();
         jobWorkers.updateApplication();
     }
 }

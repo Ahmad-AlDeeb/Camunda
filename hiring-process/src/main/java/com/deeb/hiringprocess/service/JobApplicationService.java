@@ -4,25 +4,29 @@ import com.deeb.hiringprocess.camunda.client.ZeebeClient;
 import com.deeb.hiringprocess.camunda.job.Job;
 import com.deeb.hiringprocess.entity.JobApplication;
 import com.deeb.hiringprocess.util.RequestBodyBuilder;
+import com.deeb.hiringprocess.util.WhatsappClient;
+
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
 import java.util.Map;
 
-import static com.deeb.hiringprocess.camunda.CamundaConstant.PROCESS_DEFINITION_ID;
 import static java.lang.String.format;
 
 @Service
 public class JobApplicationService {
     private final ZeebeClient zeebeClient;
+    private final WhatsappClient whatsappClient;
 
-    public JobApplicationService(ZeebeClient zeebeClient) {
+    public JobApplicationService(ZeebeClient zeebeClient, WhatsappClient whatsappClient) {
         this.zeebeClient = zeebeClient;
+        this.whatsappClient = whatsappClient;
     }
 
     public void create(JobApplication jobApplication) {
         Map<String, Object> requestBody =
-                RequestBodyBuilder.startProcessInstance(PROCESS_DEFINITION_ID, jobApplication);
+
+                RequestBodyBuilder.startProcessInstance("Process_Hiring", jobApplication);
 
         zeebeClient.startProcessInstance(requestBody);
     }
@@ -68,13 +72,15 @@ public class JobApplicationService {
         System.out.println("Applicant's response submitted. ✅");
     }
 
-    public void updateApplication(Job job) {
+    public void sendOnboardingDetails(Job job) throws Exception {
         Long jobKey = job.jobKey();
         String name = (String) job.variables().get("name");
         String status = (String) job.variables().get("status");
 
         System.out.println(format("Updating %s's application status... 🔃", name));
+        whatsappClient.sendMessage();
         zeebeClient.completeJob(jobKey, new HashMap<>());
+        System.out.println("Onboarding details sent. ✅");
         System.out.println(format("%s was %s!!!", name, status));
     }
 }
