@@ -2,13 +2,16 @@ package com.deeb.hiringprocess.camunda.client;
 
 import com.deeb.hiringprocess.camunda.job.ActivatedJobs;
 import com.deeb.hiringprocess.camunda.ProcessInstance;
+
 import jakarta.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Value;
+
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestClient;
 
 import java.util.Map;
+
 
 @Component
 public class ZeebeClient {

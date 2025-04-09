@@ -20,7 +20,6 @@ public class JobWorkers {
     private final OperateClient operateClient;
     private final JobApplicationService jobApplicationService;
 
-
     public JobWorkers(
             ZeebeClient zeebeClient, OperateClient operateClient, JobApplicationService jobApplicationService) {
         this.zeebeClient = zeebeClient;

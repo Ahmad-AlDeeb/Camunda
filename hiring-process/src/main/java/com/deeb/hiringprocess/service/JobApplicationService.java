@@ -5,6 +5,7 @@ import com.deeb.hiringprocess.camunda.job.Job;
 import com.deeb.hiringprocess.entity.JobApplication;
 import com.deeb.hiringprocess.util.RequestBodyBuilder;
 import com.deeb.hiringprocess.util.WhatsappClient;
+
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
@@ -24,6 +25,7 @@ public class JobApplicationService {
 
     public void create(JobApplication jobApplication) {
         Map<String, Object> requestBody =
+
                 RequestBodyBuilder.startProcessInstance("Process_Hiring", jobApplication);
 
         zeebeClient.startProcessInstance(requestBody);
@@ -72,20 +74,13 @@ public class JobApplicationService {
 
     public void sendOnboardingDetails(Job job) throws Exception {
         Long jobKey = job.jobKey();
-
-        System.out.println(format("Sending onboarding details to %s... 🔃", job.variables().get("name")));
-        whatsappClient.sendMessage();
-        zeebeClient.completeJob(jobKey, new HashMap<>());
-        System.out.println("Onboarding details sent. ✅");
-    }
-
-    public void updateApplication(Job job) {
-        Long jobKey = job.jobKey();
         String name = (String) job.variables().get("name");
         String status = (String) job.variables().get("status");
 
         System.out.println(format("Updating %s's application status... 🔃", name));
+        whatsappClient.sendMessage();
         zeebeClient.completeJob(jobKey, new HashMap<>());
+        System.out.println("Onboarding details sent. ✅");
         System.out.println(format("%s was %s!!!", name, status));
     }
 }
