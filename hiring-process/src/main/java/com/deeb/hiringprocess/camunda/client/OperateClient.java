@@ -1,22 +1,28 @@
 package com.deeb.hiringprocess.camunda.client;
 
 import com.deeb.hiringprocess.camunda.flownode.FoundFlowNodes;
+import jakarta.annotation.PostConstruct;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestClient;
 
 import java.util.Map;
 
-import static com.deeb.hiringprocess.camunda.CamundaConstant.OPERATE_BASE_URL;
-import static com.deeb.hiringprocess.camunda.CamundaConstant.OPERATE_TOKEN;
-
 @Component
 public class OperateClient {
-    private final RestClient restClient;
+    @Value("${OPERATE_BASE_URL}")
+    private String operateBaseUrl;
 
-    public OperateClient() {
+    @Value("${OPERATE_TOKEN}")
+    private String operateToken;
+
+    private RestClient restClient;
+
+    @PostConstruct
+    public void init() {
         restClient = RestClient.builder()
-                .baseUrl(OPERATE_BASE_URL)
-                .defaultHeader("Authorization", "Bearer " + OPERATE_TOKEN)
+                .baseUrl(operateBaseUrl)
+                .defaultHeader("Authorization", "Bearer " + operateToken)
                 .build();
     }
 

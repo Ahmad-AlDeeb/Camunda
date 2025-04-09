@@ -10,7 +10,6 @@ import org.springframework.stereotype.Service;
 import java.util.HashMap;
 import java.util.Map;
 
-import static com.deeb.hiringprocess.camunda.CamundaConstant.PROCESS_DEFINITION_ID;
 import static java.lang.String.format;
 
 @Service
@@ -25,7 +24,7 @@ public class JobApplicationService {
 
     public void create(JobApplication jobApplication) {
         Map<String, Object> requestBody =
-                RequestBodyBuilder.startProcessInstance(PROCESS_DEFINITION_ID, jobApplication);
+                RequestBodyBuilder.startProcessInstance("Process_Hiring", jobApplication);
 
         zeebeClient.startProcessInstance(requestBody);
     }

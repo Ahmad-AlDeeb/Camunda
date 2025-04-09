@@ -6,7 +6,6 @@ import com.deeb.hiringprocess.camunda.flownode.FlowNode;
 import com.deeb.hiringprocess.camunda.flownode.FlowNodeState;
 import com.deeb.hiringprocess.service.JobApplicationService;
 import com.deeb.hiringprocess.util.RequestBodyBuilder;
-import com.deeb.hiringprocess.util.WhatsappClient;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 
