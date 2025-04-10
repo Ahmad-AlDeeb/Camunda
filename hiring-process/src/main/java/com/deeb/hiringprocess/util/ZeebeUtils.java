@@ -1,8 +1,10 @@
 package com.deeb.hiringprocess.util;
 
-import com.deeb.hiringprocess.camunda.job.RestJobWorkers;
+import com.deeb.hiringprocess.camunda.job.UserTaskWorkers;
 import com.deeb.hiringprocess.entity.JobApplication;
 import com.deeb.hiringprocess.worker.CalculateCvScoreHandler;
+import com.deeb.hiringprocess.worker.SaveApplicationHandler;
+import com.deeb.hiringprocess.worker.UpdateApplicationWorker;
 import io.camunda.zeebe.client.ZeebeClient;
 import io.camunda.zeebe.client.impl.oauth.OAuthCredentialsProvider;
 import io.camunda.zeebe.client.impl.oauth.OAuthCredentialsProviderBuilder;
@@ -31,10 +33,10 @@ public class ZeebeUtils {
 
     private OAuthCredentialsProvider credentialsProvider;
     private static ZeebeClient client;
-    private static RestJobWorkers restJobWorkers;
+    private static UserTaskWorkers userTaskWorkers;
 
-    public ZeebeUtils(RestJobWorkers restJobWorkers) {
-        this.restJobWorkers = restJobWorkers;
+    public ZeebeUtils(UserTaskWorkers userTaskWorkers) {
+        this.userTaskWorkers = userTaskWorkers;
     }
 
     @PostConstruct
@@ -58,37 +60,22 @@ public class ZeebeUtils {
                 .timeout(Duration.ofSeconds(10).toMillis())
                 .open();
 
-        restJobWorkers.scheduleInterview();
+        client.newWorker()
+                .jobType("SaveApplication")
+                .handler(new SaveApplicationHandler())
+                .timeout(Duration.ofSeconds(10).toMillis())
+                .open();
 
-//        client.newWorker()
-//                .jobType("CalculateCvScore")
-//                .handler(new CalculateCvScoreHandler())
-//                .timeout(Duration.ofSeconds(10).toMillis())
-//                .open();
-//
-//        client.newWorker()
-//                .jobType("CalculateCvScore")
-//                .handler(new CalculateCvScoreHandler())
-//                .timeout(Duration.ofSeconds(10).toMillis())
-//                .open();
-//
-//        client.newWorker()
-//                .jobType("CalculateCvScore")
-//                .handler(new CalculateCvScoreHandler())
-//                .timeout(Duration.ofSeconds(10).toMillis())
-//                .open();
-//
-//        client.newWorker()
-//                .jobType("CalculateCvScore")
-//                .handler(new CalculateCvScoreHandler())
-//                .timeout(Duration.ofSeconds(10).toMillis())
-//                .open();
-//
-//        client.newWorker()
-//                .jobType("CalculateCvScore")
-//                .handler(new CalculateCvScoreHandler())
-//                .timeout(Duration.ofSeconds(10).toMillis())
-//                .open();
+
+        client.newWorker()
+                .jobType("UpdateApplication")
+                .handler(new UpdateApplicationWorker())
+                .timeout(Duration.ofSeconds(10).toMillis())
+                .open();
+
+//        userTaskWorkers.scheduleInterview();
+        userTaskWorkers.doInterview();
+        userTaskWorkers.submitApplicantResponse();
     }
 
     public static void startProcessInstance(JobApplication jobApplication) {

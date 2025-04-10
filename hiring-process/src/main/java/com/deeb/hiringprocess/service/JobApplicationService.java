@@ -18,47 +18,23 @@ public class JobApplicationService {
         System.out.println("Scheduling interview... 🔃");
         return "yes";
     }
-//
-//    public void saveApplication(Job job) {
-//        Long jobKey = job.jobKey();
-//
-//        System.out.println(format("Saving %s's Job Application... 🔃", job.variables().get("name")));
-//        zeebeClient.completeJob(jobKey, new HashMap<>());
-//        System.out.println("Job Application Saved. ✅");
-//    }
-//
-//    public void doInterview(Long userTaskKey) throws Exception {
-//        Map<String, Object> requestBody = RequestBodyBuilder.completeJob(Map.of("isFit", "yes"));
-//
-//        System.out.println("Doing interview... 🔃");
-//        zeebeClient.completeUserTask(userTaskKey, requestBody);
-//        System.out.println("Interview done. ✅");
-//    }
-//
-//    public void submitApplicantResponse(Long userTaskKey) throws Exception {
-//        Map<String, Object> requestBody = RequestBodyBuilder.completeJob(Map.of("isOfferAccepted", "yes"));
-//
-//        System.out.println("Submitting applicant's response... 🔃");
-//        zeebeClient.completeUserTask(userTaskKey, requestBody);
-//        System.out.println("Applicant's response submitted. ✅");
-//    }
-//
-//    public void sendOnboardingDetails(Job job) throws Exception {
-//        Long jobKey = job.jobKey();
-//
-//        System.out.println(format("Sending onboarding details to %s... 🔃", job.variables().get("name")));
-//        whatsappClient.sendMessage();
-//        zeebeClient.completeJob(jobKey, new HashMap<>());
-//        System.out.println("Onboarding details sent. ✅");
-//    }
-//
-//    public void updateApplication(Job job) {
-//        Long jobKey = job.jobKey();
-//        String name = (String) job.variables().get("name");
-//        String status = (String) job.variables().get("status");
-//
-//        System.out.println(format("Updating %s's application status... 🔃", name));
-//        zeebeClient.completeJob(jobKey, new HashMap<>());
-//        System.out.println(format("%s was %s!!!", name, status));
-//    }
+
+    public void saveApplication(String name) {
+        System.out.println(format("Saving %s's Job Application... 🔃", name));
+    }
+
+    public String doInterview() throws Exception {
+        System.out.println("Doing interview... 🔃");
+        return "yes";
+    }
+
+    public String submitApplicantResponse() throws Exception {
+        System.out.println("Submitting applicant's response... 🔃");
+        return "yes";
+    }
+
+    public String updateApplication(String name) {
+        System.out.println(format("Updating %s's Job Application... 🔃", name));
+        return "yes";
+    }
 }
