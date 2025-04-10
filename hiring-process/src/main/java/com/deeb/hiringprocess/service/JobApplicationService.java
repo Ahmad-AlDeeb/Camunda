@@ -83,4 +83,14 @@ public class JobApplicationService {
         System.out.println("Onboarding details sent. ✅");
         System.out.println(format("%s was %s!!!", name, status));
     }
+
+        public void updateApplication(Job job) {
+        Long jobKey = job.jobKey();
+        String name = (String) job.variables().get("name");
+        String status = (String) job.variables().get("status");
+
+        System.out.println(format("Updating %s's application status... 🔃", name));
+        zeebeClient.completeJob(jobKey, new HashMap<>());
+        System.out.println(format("%s was %s!!!", name, status));
+    }
 }
