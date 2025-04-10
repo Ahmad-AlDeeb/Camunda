@@ -22,7 +22,7 @@ public class HiringProcessApplication implements CommandLineRunner {
     @Override
     public void run(String... args) throws Exception {
         jobWorkers.calculateCvScore();
-        jobWorkers.scheduleInterview();
+//        jobWorkers.scheduleInterview();
         jobWorkers.saveApplication();
         jobWorkers.doInterview();
         jobWorkers.submitApplicantResponse();
