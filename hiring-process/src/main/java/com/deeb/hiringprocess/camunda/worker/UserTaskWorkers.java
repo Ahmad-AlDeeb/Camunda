@@ -1,11 +1,11 @@
-package com.deeb.hiringprocess.camunda.job;
+package com.deeb.hiringprocess.camunda.worker;
 
 import com.deeb.hiringprocess.camunda.task.Task;
 import com.deeb.hiringprocess.camunda.task.TaskState;
 import com.deeb.hiringprocess.camunda.client.RestZeebeClient;
 import com.deeb.hiringprocess.camunda.client.TasklistClient;
 import com.deeb.hiringprocess.service.JobApplicationService;
-import com.deeb.hiringprocess.util.RequestBodyBuilder;
+import com.deeb.hiringprocess.camunda.util.RequestBodyBuilder;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 

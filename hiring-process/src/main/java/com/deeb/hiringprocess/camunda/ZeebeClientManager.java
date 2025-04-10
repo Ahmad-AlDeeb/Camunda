@@ -1,10 +1,10 @@
-package com.deeb.hiringprocess.util;
+package com.deeb.hiringprocess.camunda;
 
-import com.deeb.hiringprocess.camunda.job.UserTaskWorkers;
+import com.deeb.hiringprocess.camunda.worker.UserTaskWorkers;
 import com.deeb.hiringprocess.entity.JobApplication;
-import com.deeb.hiringprocess.worker.CalculateCvScoreHandler;
-import com.deeb.hiringprocess.worker.SaveApplicationHandler;
-import com.deeb.hiringprocess.worker.UpdateApplicationWorker;
+import com.deeb.hiringprocess.camunda.worker.CalculateCvScoreHandler;
+import com.deeb.hiringprocess.camunda.worker.SaveApplicationHandler;
+import com.deeb.hiringprocess.camunda.worker.UpdateApplicationWorker;
 import io.camunda.zeebe.client.ZeebeClient;
 import io.camunda.zeebe.client.impl.oauth.OAuthCredentialsProvider;
 import io.camunda.zeebe.client.impl.oauth.OAuthCredentialsProviderBuilder;
@@ -15,7 +15,7 @@ import org.springframework.stereotype.Component;
 import java.time.Duration;
 
 @Component
-public class ZeebeUtils {
+public class ZeebeClientManager {
     @Value("${ZEEBE_AUTHORIZATION_SERVER_URL}")
     private String ZEEBE_AUTHORIZATION_SERVER_URL;
 
@@ -35,7 +35,7 @@ public class ZeebeUtils {
     private static ZeebeClient client;
     private static UserTaskWorkers userTaskWorkers;
 
-    public ZeebeUtils(UserTaskWorkers userTaskWorkers) {
+    public ZeebeClientManager(UserTaskWorkers userTaskWorkers) {
         this.userTaskWorkers = userTaskWorkers;
     }
 

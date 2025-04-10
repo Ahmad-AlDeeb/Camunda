@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import static com.deeb.hiringprocess.util.ApiResponseCreator.createUnifiedResponse;
-import static com.deeb.hiringprocess.util.ZeebeUtils.startProcessInstance;
+import static com.deeb.hiringprocess.camunda.ZeebeClientManager.startProcessInstance;
 import static org.springframework.http.HttpStatus.CREATED;
 
 @RestController
