@@ -1,9 +1,6 @@
 package com.deeb.hiringprocess.service;
 
-import com.deeb.hiringprocess.util.RequestBodyBuilder;
 import org.springframework.stereotype.Service;
-
-import java.util.Map;
 
 import static java.lang.String.format;
 

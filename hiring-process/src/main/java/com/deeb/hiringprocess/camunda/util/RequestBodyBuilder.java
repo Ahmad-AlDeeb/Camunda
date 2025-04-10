@@ -1,6 +1,5 @@
-package com.deeb.hiringprocess.util;
+package com.deeb.hiringprocess.camunda.util;
 
-import com.deeb.hiringprocess.camunda.task.TaskState;
 import com.deeb.hiringprocess.camunda.flownode.FlowNodeState;
 
 import java.util.Map;

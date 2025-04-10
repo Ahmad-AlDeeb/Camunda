@@ -4,7 +4,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.scheduling.annotation.EnableAsync;
 
-import static com.deeb.hiringprocess.util.ZeebeUtils.registerJobWorkers;
+import static com.deeb.hiringprocess.camunda.ZeebeClientManager.registerJobWorkers;
 
 @SpringBootApplication
 @EnableAsync
