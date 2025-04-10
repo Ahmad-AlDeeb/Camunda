@@ -14,7 +14,7 @@ import java.util.Map;
 
 
 @Component
-public class ZeebeClient {
+public class RestZeebeClient {
     @Value("${ZEEBE_REST_ADDRESS}")
     private String zeebeRestAddress;
 
