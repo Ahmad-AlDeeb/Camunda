@@ -51,6 +51,12 @@
 			<artifactId>spring-boot-starter-aop</artifactId>
 			<version>3.4.4</version>
 		</dependency>
+		<!-- https://mvnrepository.com/artifact/io.camunda/zeebe-client-java -->
+		<dependency>
+			<groupId>io.camunda</groupId>
+			<artifactId>zeebe-client-java</artifactId>
+			<version>8.7.0</version>
+		</dependency>
 	</dependencies>
 
 	<build>
