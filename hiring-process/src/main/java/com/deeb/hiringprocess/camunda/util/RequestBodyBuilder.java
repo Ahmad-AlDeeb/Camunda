@@ -1,4 +1,4 @@
-package com.deeb.hiringprocess.util;
+package com.deeb.hiringprocess.camunda.util;
 
 import com.deeb.hiringprocess.camunda.flownode.FlowNodeState;
 
@@ -31,6 +31,10 @@ public final class RequestBodyBuilder {
                         "state", state
                 )
         );
+    }
+
+    public static Map<String, Object> searchTasks(String taskDefinitionId) {
+        return Map.of("taskDefinitionId", taskDefinitionId);
     }
 
     private RequestBodyBuilder() {
