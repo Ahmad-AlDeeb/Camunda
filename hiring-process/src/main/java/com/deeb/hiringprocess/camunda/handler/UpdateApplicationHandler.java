@@ -1,12 +1,12 @@
-package com.deeb.hiringprocess.camunda.worker;
+package com.deeb.hiringprocess.camunda.handler;
 
 import com.deeb.hiringprocess.service.JobApplicationService;
 import io.camunda.zeebe.client.api.response.ActivatedJob;
 import io.camunda.zeebe.client.api.worker.JobClient;
 import io.camunda.zeebe.client.api.worker.JobHandler;
 
-public class UpdateApplicationWorker implements JobHandler {
-    JobApplicationService jobApplicationService = new JobApplicationService();
+public class UpdateApplicationHandler implements JobHandler {
+    private JobApplicationService jobApplicationService = new JobApplicationService();
 
     @Override
     public void handle(JobClient client, ActivatedJob job) {
