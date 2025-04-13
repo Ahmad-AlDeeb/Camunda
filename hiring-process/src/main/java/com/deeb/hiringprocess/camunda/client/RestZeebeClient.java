@@ -11,7 +11,7 @@ import java.util.Map;
 
 @Component
 public class RestZeebeClient {
-    @Value("${ZEEBE_REST_ADDRESS}")
+    @Value("${CAMUNDA_CLIENT_ZEEBE_REST_ADDRESS}")
     private String zeebeRestAddress;
 
     @Value("${ZEEBE_TOKEN}")

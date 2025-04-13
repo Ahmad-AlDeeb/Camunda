@@ -3,17 +3,21 @@ package com.deeb.hiringprocess.camunda.handler;
 import com.deeb.hiringprocess.service.JobApplicationService;
 import io.camunda.zeebe.client.api.response.ActivatedJob;
 import io.camunda.zeebe.client.api.worker.JobClient;
-import io.camunda.zeebe.client.api.worker.JobHandler;
+import io.camunda.zeebe.spring.client.annotation.JobWorker;
+import io.camunda.zeebe.spring.client.annotation.Variable;
+import org.springframework.stereotype.Component;
 
-public class UpdateApplicationHandler implements JobHandler {
-    private JobApplicationService jobApplicationService = new JobApplicationService();
+@Component
+public class UpdateApplicationHandler {
+    private final JobApplicationService jobApplicationService;
 
-    @Override
-    public void handle(JobClient client, ActivatedJob job) {
-        String name = (String) job.getVariable("name");
+    public UpdateApplicationHandler(JobApplicationService jobApplicationService) {
+        this.jobApplicationService = jobApplicationService;
+    }
 
+    @JobWorker(type = "UpdateApplication")
+    public void updateApplicationHandler(JobClient client, ActivatedJob job, @Variable String name) {
         jobApplicationService.updateApplication(name);
-
         client.newCompleteCommand(job.getKey())
                 .send()
                 .join();
