@@ -29,4 +29,5 @@ public record Task(
         Object context,
         String implementation,
         int priority
-) {}
+) {
+}

@@ -14,18 +14,18 @@ import java.util.Map;
 public class TasklistClient {
 
     @Value("${TASKLIST_BASE_URL}")
-    private String TASKLIST_BASE_URL;
+    private String tasklistBaseUrl;
 
     @Value("${TASKLIST_TOKEN}")
-    private String TASKLIST_TOKEN;
+    private String tasklistToken;
 
     private RestClient restClient;
 
     @PostConstruct
     public void init() {
         restClient = RestClient.builder()
-                .baseUrl(TASKLIST_BASE_URL)
-                .defaultHeader("Authorization", "Bearer " + TASKLIST_TOKEN)
+                .baseUrl(tasklistBaseUrl)
+                .defaultHeader("Authorization", "Bearer " + tasklistToken)
                 .build();
     }
 
@@ -36,13 +36,5 @@ public class TasklistClient {
                 .retrieve()
                 .body(new ParameterizedTypeReference<>() {
                 });
-    }
-
-    public void completeTask(Long taskKey, Map<String, Object> requestBody) {
-        restClient.post()
-                .uri("/v1/tasks/" + taskKey + "/complete")
-                .body(requestBody)
-                .retrieve()
-                .body(String.class);
     }
 }

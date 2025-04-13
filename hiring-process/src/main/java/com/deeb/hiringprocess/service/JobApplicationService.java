@@ -1,37 +1,38 @@
 package com.deeb.hiringprocess.service;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
-
-import static java.lang.String.format;
 
 @Service
 public class JobApplicationService {
+    private static final Logger LOGGER = LoggerFactory.getLogger(JobApplicationService.class);
+
     public Integer calculateCvScore(String name) {
-        System.out.println(format("Calculating %s's CV score... 🔃", name));
+        LOGGER.info("Calculating {}'s CV score... 🔃", name);
         return 95;
     }
 
-    public String scheduleInterview() throws Exception {
-        System.out.println("Scheduling interview... 🔃");
+    public String scheduleInterview() {
+        LOGGER.info("Scheduling interview... 🔃");
         return "yes";
     }
 
     public void saveApplication(String name) {
-        System.out.println(format("Saving %s's Job Application... 🔃", name));
+        LOGGER.info("Saving {}'s Job Application... 🔃", name);
     }
 
-    public String doInterview() throws Exception {
-        System.out.println("Doing interview... 🔃");
+    public String doInterview() {
+        LOGGER.info("Doing interview... 🔃");
         return "yes";
     }
 
-    public String submitApplicantResponse() throws Exception {
-        System.out.println("Submitting applicant's response... 🔃");
+    public String submitApplicantResponse() {
+        LOGGER.info("Submitting applicant's response... 🔃");
         return "yes";
     }
 
-    public String updateApplication(String name) {
-        System.out.println(format("Updating %s's Job Application... 🔃", name));
-        return "yes";
+    public void updateApplication(String name) {
+        LOGGER.info("Updating {}'s Job Application... 🔃", name);
     }
 }

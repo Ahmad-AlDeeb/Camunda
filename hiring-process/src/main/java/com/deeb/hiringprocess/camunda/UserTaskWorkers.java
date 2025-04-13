@@ -1,11 +1,11 @@
-package com.deeb.hiringprocess.camunda.worker;
+package com.deeb.hiringprocess.camunda;
 
-import com.deeb.hiringprocess.camunda.task.Task;
-import com.deeb.hiringprocess.camunda.task.TaskState;
 import com.deeb.hiringprocess.camunda.client.RestZeebeClient;
 import com.deeb.hiringprocess.camunda.client.TasklistClient;
-import com.deeb.hiringprocess.service.JobApplicationService;
+import com.deeb.hiringprocess.camunda.task.Task;
+import com.deeb.hiringprocess.camunda.task.TaskState;
 import com.deeb.hiringprocess.camunda.util.RequestBodyBuilder;
+import com.deeb.hiringprocess.service.JobApplicationService;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 
@@ -31,7 +31,7 @@ public class UserTaskWorkers {
     }
 
     @Async
-    public void scheduleInterview() throws Exception {
+    public void scheduleInterview() {
         final String taskDefinitionId = "Activity_ScheduleInterview";
         Map<String, Object> requestBody = RequestBodyBuilder.searchTasks(taskDefinitionId);
 
@@ -39,7 +39,7 @@ public class UserTaskWorkers {
         while (true) {
             List<Task> tasks = tasklist.searchTasks(requestBody);
 
-            for(Task task : tasks) {
+            for (Task task : tasks) {
                 if (completedTasks.contains(task.id())
                         || task.taskState() != TaskState.CREATED
                         || !Objects.equals(task.taskDefinitionId(), taskDefinitionId)) {
@@ -48,15 +48,14 @@ public class UserTaskWorkers {
                 completedTasks.add(task.id());
 
                 String isInterested = jobApplicationService.scheduleInterview();
-                requestBody =  RequestBodyBuilder.completeJob(Map.of("isInterested", isInterested));
+                requestBody = RequestBodyBuilder.completeJob(Map.of("isInterested", isInterested));
                 restZeebeClient.completeUserTask(parseLong(task.id()), requestBody);
             }
-            Thread.sleep(1000);
         }
     }
 
     @Async
-    public void doInterview() throws Exception {
+    public void doInterview() {
         final String taskDefinitionId = "Activity_DoInterview";
         Map<String, Object> requestBody = RequestBodyBuilder.searchTasks(taskDefinitionId);
 
@@ -64,7 +63,7 @@ public class UserTaskWorkers {
         while (true) {
             List<Task> tasks = tasklist.searchTasks(requestBody);
 
-            for(Task task : tasks) {
+            for (Task task : tasks) {
                 if (completedTasks.contains(task.id())
                         || task.taskState() != TaskState.CREATED
                         || !Objects.equals(task.taskDefinitionId(), taskDefinitionId)) {
@@ -73,15 +72,14 @@ public class UserTaskWorkers {
                 completedTasks.add(task.id());
 
                 String isFit = jobApplicationService.doInterview();
-                requestBody =  RequestBodyBuilder.completeJob(Map.of("isFit", isFit));
+                requestBody = RequestBodyBuilder.completeJob(Map.of("isFit", isFit));
                 restZeebeClient.completeUserTask(parseLong(task.id()), requestBody);
             }
-            Thread.sleep(1000);
         }
     }
 
     @Async
-    public void submitApplicantResponse() throws Exception {
+    public void submitApplicantResponse() {
         final String taskDefinitionId = "Activity_SubmitApplicantResponse";
         Map<String, Object> requestBody = RequestBodyBuilder.searchTasks(taskDefinitionId);
 
@@ -89,7 +87,7 @@ public class UserTaskWorkers {
         while (true) {
             List<Task> tasks = tasklist.searchTasks(requestBody);
 
-            for(Task task : tasks) {
+            for (Task task : tasks) {
                 if (completedTasks.contains(task.id())
                         || task.taskState() != TaskState.CREATED
                         || !Objects.equals(task.taskDefinitionId(), taskDefinitionId)) {
@@ -98,10 +96,9 @@ public class UserTaskWorkers {
                 completedTasks.add(task.id());
 
                 String isOfferAccepted = jobApplicationService.submitApplicantResponse();
-                requestBody =  RequestBodyBuilder.completeJob(Map.of("isOfferAccepted", isOfferAccepted));
+                requestBody = RequestBodyBuilder.completeJob(Map.of("isOfferAccepted", isOfferAccepted));
                 restZeebeClient.completeUserTask(parseLong(task.id()), requestBody);
             }
-            Thread.sleep(1000);
         }
     }
 }
