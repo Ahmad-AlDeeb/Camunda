@@ -1,5 +1,6 @@
 package com.deeb.hiringprocess.camunda;
 
+import com.deeb.hiringprocess.camunda.handler.UserTaskHandler;
 import com.deeb.hiringprocess.entity.JobApplication;
 import io.camunda.zeebe.client.ZeebeClient;
 import org.springframework.stereotype.Component;
@@ -9,11 +10,11 @@ public class WorkflowManager {
 
     private final ZeebeClient client;
 
-    public WorkflowManager(ZeebeClient client, UserTaskWorkers userTaskWorkers) {
+    public WorkflowManager(ZeebeClient client, UserTaskHandler userTaskHandler) {
         this.client = client;
-        userTaskWorkers.scheduleInterview();
-        userTaskWorkers.doInterview();
-        userTaskWorkers.submitApplicantResponse();
+        userTaskHandler.scheduleInterview();
+        userTaskHandler.doInterview();
+        userTaskHandler.submitApplicantResponse();
     }
 
     public void startProcessInstance(JobApplication jobApplication) {

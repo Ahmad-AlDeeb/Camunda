@@ -8,16 +8,33 @@ import io.camunda.zeebe.spring.client.annotation.Variable;
 import org.springframework.stereotype.Component;
 
 @Component
-public class SaveApplicationHandler {
+public class JobHandler {
     private final JobApplicationService jobApplicationService;
 
-    public SaveApplicationHandler(JobApplicationService jobApplicationService) {
+    public JobHandler(JobApplicationService jobApplicationService) {
         this.jobApplicationService = jobApplicationService;
+    }
+
+    @JobWorker(type = "CalculateCvScore")
+    public void calculateCvScoreHandler(JobClient client, ActivatedJob job, @Variable String name) {
+        Integer score = jobApplicationService.calculateCvScore(name);
+        client.newCompleteCommand(job.getKey())
+                .variable("score", score)
+                .send()
+                .join();
     }
 
     @JobWorker(type = "SaveApplication")
     public void saveApplicationHandler(JobClient client, ActivatedJob job, @Variable String name) {
         jobApplicationService.saveApplication(name);
+        client.newCompleteCommand(job.getKey())
+                .send()
+                .join();
+    }
+
+    @JobWorker(type = "UpdateApplication")
+    public void updateApplicationHandler(JobClient client, ActivatedJob job, @Variable String name) {
+        jobApplicationService.updateApplication(name);
         client.newCompleteCommand(job.getKey())
                 .send()
                 .join();

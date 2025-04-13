@@ -1,4 +1,4 @@
-package com.deeb.hiringprocess.camunda;
+package com.deeb.hiringprocess.camunda.handler;
 
 import com.deeb.hiringprocess.camunda.client.RestZeebeClient;
 import com.deeb.hiringprocess.camunda.client.TasklistClient;
@@ -18,12 +18,12 @@ import java.util.Set;
 import static java.lang.Long.parseLong;
 
 @Component
-public class UserTaskWorkers {
+public class UserTaskHandler {
     private final RestZeebeClient restZeebeClient;
     private final TasklistClient tasklist;
     private final JobApplicationService jobApplicationService;
 
-    public UserTaskWorkers(RestZeebeClient restZeebeClient, TasklistClient tasklist,
+    public UserTaskHandler(RestZeebeClient restZeebeClient, TasklistClient tasklist,
                            JobApplicationService jobApplicationService) {
         this.restZeebeClient = restZeebeClient;
         this.tasklist = tasklist;
