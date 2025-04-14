@@ -7,6 +7,8 @@ import io.camunda.zeebe.spring.client.annotation.JobWorker;
 import io.camunda.zeebe.spring.client.annotation.Variable;
 import org.springframework.stereotype.Component;
 
+import java.util.Map;
+
 @Component
 public class JobHandler {
     private final JobApplicationService jobApplicationService;
@@ -16,27 +18,17 @@ public class JobHandler {
     }
 
     @JobWorker(type = "CalculateCvScore")
-    public void calculateCvScoreHandler(JobClient client, ActivatedJob job, @Variable String name) {
-        Integer score = jobApplicationService.calculateCvScore(name);
-        client.newCompleteCommand(job.getKey())
-                .variable("score", score)
-                .send()
-                .join();
+    public Map<String, Object> calculateCvScoreHandler(JobClient client, ActivatedJob job, @Variable String name) {
+        return Map.of("score", jobApplicationService.calculateCvScore(name));
     }
 
     @JobWorker(type = "SaveApplication")
     public void saveApplicationHandler(JobClient client, ActivatedJob job, @Variable String name) {
         jobApplicationService.saveApplication(name);
-        client.newCompleteCommand(job.getKey())
-                .send()
-                .join();
     }
 
     @JobWorker(type = "UpdateApplication")
     public void updateApplicationHandler(JobClient client, ActivatedJob job, @Variable String name) {
         jobApplicationService.updateApplication(name);
-        client.newCompleteCommand(job.getKey())
-                .send()
-                .join();
     }
 }
