@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:modeler="http://camunda.org/schema/modeler/1.0" id="Definitions_1r9hmv0" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="5.32.0" modeler:executionPlatform="Camunda Platform" modeler:executionPlatformVersion="7.22.0">
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:bioc="http://bpmn.io/schema/bpmn/biocolor/1.0" xmlns:color="http://www.omg.org/spec/BPMN/non-normative/color/1.0" xmlns:modeler="http://camunda.org/schema/modeler/1.0" id="Definitions_1r9hmv0" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="5.32.0" modeler:executionPlatform="Camunda Platform" modeler:executionPlatformVersion="7.22.0">
   <bpmn:process id="hiring-process-7" name="Hiring Process 7" isExecutable="true" camunda:historyTimeToLive="180">
     <bpmn:startEvent id="StartEvent_1" name="Application received">
       <bpmn:outgoing>Flow_1himsf1</bpmn:outgoing>
     </bpmn:startEvent>
     <bpmn:sequenceFlow id="Flow_1himsf1" sourceRef="StartEvent_1" targetRef="calculate-cv-score" />
-    <bpmn:serviceTask id="calculate-cv-score" name="Calculate CV score" camunda:delegateExpression="${calculateCvScore}">
+    <bpmn:serviceTask id="calculate-cv-score" name="Calculate CV score" camunda:delegateExpression="${calculateCvScoreDelegate}">
       <bpmn:incoming>Flow_1himsf1</bpmn:incoming>
       <bpmn:outgoing>Flow_1kpt7u4</bpmn:outgoing>
     </bpmn:serviceTask>
@@ -24,7 +24,7 @@
     <bpmn:sequenceFlow id="Flow_0brluj3" name="No" sourceRef="Gateway_1fxdwsu" targetRef="Gateway_069q8f3">
       <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${score &lt; 90}</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
-    <bpmn:userTask id="schedule-interview" name="Schedule Interview" camunda:formRef="schedule-interview" camunda:formRefBinding="deployment" camunda:assignee="demo">
+    <bpmn:userTask id="schedule-interview" name="Schedule Interview" camunda:formRef="schedule-interview" camunda:formRefBinding="deployment" camunda:assignee="a">
       <bpmn:incoming>Flow_0wcs3sl</bpmn:incoming>
       <bpmn:outgoing>Flow_0j9jrpt</bpmn:outgoing>
     </bpmn:userTask>
@@ -38,12 +38,12 @@
       <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${isInterested == "no"}</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
     <bpmn:sequenceFlow id="Flow_0qm20kh" name="Yes" sourceRef="Gateway_1u7l4pi" targetRef="Activity_SaveApplication" />
-    <bpmn:userTask id="do-interview" name="Do interview" camunda:formRef="do-interview" camunda:formRefBinding="latest" camunda:assignee="demo">
+    <bpmn:userTask id="do-interview" name="Do interview" camunda:formRef="do-interview" camunda:formRefBinding="latest" camunda:assignee="a">
       <bpmn:incoming>Flow_0pffxmn</bpmn:incoming>
       <bpmn:outgoing>Flow_1tfiwto</bpmn:outgoing>
     </bpmn:userTask>
     <bpmn:sequenceFlow id="Flow_0pffxmn" sourceRef="Activity_SaveApplication" targetRef="do-interview" />
-    <bpmn:serviceTask id="Activity_SaveApplication" name="Save application" camunda:delegateExpression="${saveApplication}">
+    <bpmn:serviceTask id="Activity_SaveApplication" name="Save application" camunda:delegateExpression="${saveApplicationDelegate}">
       <bpmn:incoming>Flow_0qm20kh</bpmn:incoming>
       <bpmn:outgoing>Flow_0pffxmn</bpmn:outgoing>
     </bpmn:serviceTask>
@@ -67,12 +67,12 @@
     </bpmn:sequenceFlow>
     <bpmn:sequenceFlow id="Flow_0e8stq9" sourceRef="Gateway_03boh00" targetRef="send-rejection" />
     <bpmn:sequenceFlow id="Flow_1qohot6" name="Yes" sourceRef="Gateway_0ivbrfa" targetRef="send-offer" />
-    <bpmn:sendTask id="send-offer" name="Send offer" camunda:delegateExpression="${sendOffer}">
+    <bpmn:sendTask id="send-offer" name="Send offer" camunda:delegateExpression="${sendOfferDelegate}">
       <bpmn:incoming>Flow_1qohot6</bpmn:incoming>
       <bpmn:outgoing>Flow_092bkcj</bpmn:outgoing>
     </bpmn:sendTask>
     <bpmn:sequenceFlow id="Flow_092bkcj" sourceRef="send-offer" targetRef="submit-applicant-response" />
-    <bpmn:userTask id="submit-applicant-response" name="Submit applicant&#39;s response" camunda:formRef="submit-applicant-response" camunda:formRefBinding="deployment" camunda:assignee="demo">
+    <bpmn:userTask id="submit-applicant-response" name="Submit applicant&#39;s response" camunda:formRef="submit-applicant-response" camunda:formRefBinding="deployment" camunda:assignee="a">
       <bpmn:incoming>Flow_092bkcj</bpmn:incoming>
       <bpmn:outgoing>Flow_1ed3lln</bpmn:outgoing>
     </bpmn:userTask>
@@ -83,28 +83,28 @@
     </bpmn:exclusiveGateway>
     <bpmn:sequenceFlow id="Flow_1ed3lln" sourceRef="submit-applicant-response" targetRef="Gateway_0wuwco1" />
     <bpmn:sequenceFlow id="Flow_0eri409" name="Yes" sourceRef="Gateway_0wuwco1" targetRef="send-onboarding-details" />
-    <bpmn:sendTask id="send-rejection" name="Send rejection" camunda:delegateExpression="${sendRejection}">
+    <bpmn:sendTask id="send-rejection" name="Send rejection" camunda:delegateExpression="${sendRejectionDelegate}">
       <bpmn:incoming>Flow_0e8stq9</bpmn:incoming>
       <bpmn:outgoing>Flow_1ttcdez</bpmn:outgoing>
     </bpmn:sendTask>
     <bpmn:sequenceFlow id="Flow_1ttcdez" sourceRef="send-rejection" targetRef="update-application-rejected" />
-    <bpmn:sendTask id="send-onboarding-details" name="Send onboarding details" camunda:delegateExpression="${sendOnboardingDetails}">
+    <bpmn:sendTask id="send-onboarding-details" name="Send onboarding details" camunda:delegateExpression="${sendOnboardingDetailsDelegate}">
       <bpmn:incoming>Flow_0eri409</bpmn:incoming>
       <bpmn:outgoing>Flow_0gbzqfw</bpmn:outgoing>
     </bpmn:sendTask>
     <bpmn:sequenceFlow id="Flow_0gbzqfw" sourceRef="send-onboarding-details" targetRef="update-application-hired" />
-    <bpmn:serviceTask id="update-application-hired" name="Update application" camunda:delegateExpression="${updateApplication}">
+    <bpmn:serviceTask id="update-application-hired" name="Update application" camunda:delegateExpression="${updateApplicationDelegate}">
       <bpmn:incoming>Flow_0gbzqfw</bpmn:incoming>
       <bpmn:outgoing>Flow_1xowlfv</bpmn:outgoing>
     </bpmn:serviceTask>
-    <bpmn:serviceTask id="update-application-lost" name="Update application" camunda:delegateExpression="${updateApplication}">
+    <bpmn:serviceTask id="update-application-lost" name="Update application" camunda:delegateExpression="${updateApplicationDelegate}">
       <bpmn:incoming>Flow_1hki7v2</bpmn:incoming>
       <bpmn:outgoing>Flow_1edkepa</bpmn:outgoing>
     </bpmn:serviceTask>
     <bpmn:sequenceFlow id="Flow_1hki7v2" name="No" sourceRef="Gateway_0wuwco1" targetRef="update-application-lost">
       <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${isOfferAccepted == "no"}</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
-    <bpmn:serviceTask id="update-application-rejected" name="Update application" camunda:delegateExpression="${updateApplication}">
+    <bpmn:serviceTask id="update-application-rejected" name="Update application" camunda:delegateExpression="${updateApplicationDelegate}">
       <bpmn:incoming>Flow_1ttcdez</bpmn:incoming>
       <bpmn:outgoing>Flow_0wm5inp</bpmn:outgoing>
     </bpmn:serviceTask>
@@ -135,6 +135,9 @@
           <dc:Bounds x="417" y="131" width="67" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Gateway_069q8f3_di" bpmnElement="Gateway_069q8f3" isMarkerVisible="true" bioc:stroke="#831311" bioc:fill="#ffcdd2" color:background-color="#ffcdd2" color:border-color="#831311">
+        <dc:Bounds x="685" y="415" width="50" height="50" />
+      </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Activity_0kzpe8j_di" bpmnElement="schedule-interview">
         <dc:Bounds x="530" y="140" width="100" height="80" />
       </bpmndi:BPMNShape>
@@ -150,62 +153,59 @@
       <bpmndi:BPMNShape id="Activity_0xswevr_di" bpmnElement="Activity_SaveApplication">
         <dc:Bounds x="800" y="140" width="100" height="80" />
       </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_0br7nho_di" bpmnElement="Event_0br7nho" bioc:stroke="#831311" bioc:fill="#ffcdd2" color:background-color="#ffcdd2" color:border-color="#831311">
+        <dc:Bounds x="2182" y="422" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="2157" y="465" width="87" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Gateway_0ivbrfa_di" bpmnElement="Gateway_0ivbrfa" isMarkerVisible="true">
         <dc:Bounds x="1165" y="155" width="50" height="50" />
         <bpmndi:BPMNLabel>
           <dc:Bounds x="1149" y="125" width="83" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Activity_11m6v8d_di" bpmnElement="send-offer">
+      <bpmndi:BPMNShape id="Gateway_03boh00_di" bpmnElement="Gateway_03boh00" isMarkerVisible="true" bioc:stroke="#831311" bioc:fill="#ffcdd2" color:background-color="#ffcdd2" color:border-color="#831311">
+        <dc:Bounds x="1165" y="415" width="50" height="50" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_11m6v8d_di" bpmnElement="send-offer" bioc:stroke="#205022" bioc:fill="#c8e6c9" color:background-color="#c8e6c9" color:border-color="#205022">
         <dc:Bounds x="1300" y="140" width="100" height="80" />
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Activity_01mmce9_di" bpmnElement="submit-applicant-response">
+      <bpmndi:BPMNShape id="Activity_01mmce9_di" bpmnElement="submit-applicant-response" bioc:stroke="#205022" bioc:fill="#c8e6c9" color:background-color="#c8e6c9" color:border-color="#205022">
         <dc:Bounds x="1490" y="140" width="100" height="80" />
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Gateway_0wuwco1_di" bpmnElement="Gateway_0wuwco1" isMarkerVisible="true">
+      <bpmndi:BPMNShape id="Gateway_0wuwco1_di" bpmnElement="Gateway_0wuwco1" isMarkerVisible="true" bioc:stroke="#205022" bioc:fill="#c8e6c9" color:background-color="#c8e6c9" color:border-color="#205022">
         <dc:Bounds x="1665" y="155" width="50" height="50" />
         <bpmndi:BPMNLabel>
           <dc:Bounds x="1660" y="131" width="79" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Activity_1bu6goj_di" bpmnElement="send-onboarding-details">
+      <bpmndi:BPMNShape id="BPMNShape_11pw3rb" bpmnElement="send-rejection" bioc:stroke="#831311" bioc:fill="#ffcdd2" color:background-color="#ffcdd2" color:border-color="#831311">
+        <dc:Bounds x="1300" y="400" width="100" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_1bu6goj_di" bpmnElement="send-onboarding-details" bioc:stroke="#205022" bioc:fill="#c8e6c9" color:background-color="#c8e6c9" color:border-color="#205022">
         <dc:Bounds x="1800" y="140" width="100" height="80" />
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Activity_1uwomf0_di" bpmnElement="update-application-hired">
+      <bpmndi:BPMNShape id="Activity_1uwomf0_di" bpmnElement="update-application-hired" bioc:stroke="#205022" bioc:fill="#c8e6c9" color:background-color="#c8e6c9" color:border-color="#205022">
         <dc:Bounds x="1990" y="140" width="100" height="80" />
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="BPMNShape_1qob2j0" bpmnElement="update-application-lost">
+      <bpmndi:BPMNShape id="BPMNShape_1qob2j0" bpmnElement="update-application-lost" bioc:stroke="#6b3c00" bioc:fill="#ffe0b2" color:background-color="#ffe0b2" color:border-color="#6b3c00">
         <dc:Bounds x="1990" y="260" width="100" height="80" />
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Event_0khg509_di" bpmnElement="Event_0khg509">
+      <bpmndi:BPMNShape id="BPMNShape_0s91rnr" bpmnElement="update-application-rejected" bioc:stroke="#831311" bioc:fill="#ffcdd2" color:background-color="#ffcdd2" color:border-color="#831311">
+        <dc:Bounds x="1990" y="400" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_0khg509_di" bpmnElement="Event_0khg509" bioc:stroke="#205022" bioc:fill="#c8e6c9" color:background-color="#c8e6c9" color:border-color="#205022">
         <dc:Bounds x="2182" y="162" width="36" height="36" />
         <bpmndi:BPMNLabel>
           <dc:Bounds x="2164" y="205" width="72" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Event_1ypp7ga_di" bpmnElement="Event_1ypp7ga">
+      <bpmndi:BPMNShape id="Event_1ypp7ga_di" bpmnElement="Event_1ypp7ga" bioc:stroke="#6b3c00" bioc:fill="#ffe0b2" color:background-color="#ffe0b2" color:border-color="#6b3c00">
         <dc:Bounds x="2182" y="282" width="36" height="36" />
         <bpmndi:BPMNLabel>
           <dc:Bounds x="2167" y="325" width="66" height="14" />
-        </bpmndi:BPMNLabel>
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Gateway_069q8f3_di" bpmnElement="Gateway_069q8f3" isMarkerVisible="true">
-        <dc:Bounds x="685" y="415" width="50" height="50" />
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Gateway_03boh00_di" bpmnElement="Gateway_03boh00" isMarkerVisible="true">
-        <dc:Bounds x="1165" y="415" width="50" height="50" />
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="BPMNShape_11pw3rb" bpmnElement="send-rejection">
-        <dc:Bounds x="1300" y="400" width="100" height="80" />
-        <bpmndi:BPMNLabel />
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="BPMNShape_0s91rnr" bpmnElement="update-application-rejected">
-        <dc:Bounds x="1990" y="400" width="100" height="80" />
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Event_0br7nho_di" bpmnElement="Event_0br7nho">
-        <dc:Bounds x="2182" y="422" width="36" height="36" />
-        <bpmndi:BPMNLabel>
-          <dc:Bounds x="2157" y="465" width="87" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNEdge id="Flow_1himsf1_di" bpmnElement="Flow_1himsf1">
@@ -223,7 +223,7 @@
           <dc:Bounds x="494" y="162" width="18" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_0brluj3_di" bpmnElement="Flow_0brluj3">
+      <bpmndi:BPMNEdge id="Flow_0brluj3_di" bpmnElement="Flow_0brluj3" bioc:stroke="#831311" color:border-color="#831311">
         <di:waypoint x="450" y="205" />
         <di:waypoint x="450" y="440" />
         <di:waypoint x="685" y="440" />
@@ -235,7 +235,7 @@
         <di:waypoint x="630" y="180" />
         <di:waypoint x="685" y="180" />
       </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_0dcrpw8_di" bpmnElement="Flow_0dcrpw8">
+      <bpmndi:BPMNEdge id="Flow_0dcrpw8_di" bpmnElement="Flow_0dcrpw8" bioc:stroke="#831311" color:border-color="#831311">
         <di:waypoint x="710" y="205" />
         <di:waypoint x="710" y="415" />
         <bpmndi:BPMNLabel>
@@ -253,7 +253,7 @@
         <di:waypoint x="900" y="180" />
         <di:waypoint x="980" y="180" />
       </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_0xiqvcr_di" bpmnElement="Flow_0xiqvcr">
+      <bpmndi:BPMNEdge id="Flow_0xiqvcr_di" bpmnElement="Flow_0xiqvcr" bioc:stroke="#831311" color:border-color="#831311">
         <di:waypoint x="735" y="440" />
         <di:waypoint x="1165" y="440" />
       </bpmndi:BPMNEdge>
@@ -261,48 +261,48 @@
         <di:waypoint x="1080" y="180" />
         <di:waypoint x="1165" y="180" />
       </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_11yh3ul_di" bpmnElement="Flow_11yh3ul">
+      <bpmndi:BPMNEdge id="Flow_11yh3ul_di" bpmnElement="Flow_11yh3ul" bioc:stroke="#831311" color:border-color="#831311">
         <di:waypoint x="1190" y="205" />
         <di:waypoint x="1190" y="415" />
         <bpmndi:BPMNLabel>
           <dc:Bounds x="1198" y="314" width="15" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_0e8stq9_di" bpmnElement="Flow_0e8stq9">
+      <bpmndi:BPMNEdge id="Flow_0e8stq9_di" bpmnElement="Flow_0e8stq9" bioc:stroke="#831311" color:border-color="#831311">
         <di:waypoint x="1215" y="440" />
         <di:waypoint x="1300" y="440" />
       </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_1qohot6_di" bpmnElement="Flow_1qohot6">
+      <bpmndi:BPMNEdge id="Flow_1qohot6_di" bpmnElement="Flow_1qohot6" bioc:stroke="#205022" color:border-color="#205022">
         <di:waypoint x="1215" y="180" />
         <di:waypoint x="1300" y="180" />
         <bpmndi:BPMNLabel>
           <dc:Bounds x="1249" y="162" width="18" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_092bkcj_di" bpmnElement="Flow_092bkcj">
+      <bpmndi:BPMNEdge id="Flow_092bkcj_di" bpmnElement="Flow_092bkcj" bioc:stroke="#205022" color:border-color="#205022">
         <di:waypoint x="1400" y="180" />
         <di:waypoint x="1490" y="180" />
       </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_1ed3lln_di" bpmnElement="Flow_1ed3lln">
+      <bpmndi:BPMNEdge id="Flow_1ed3lln_di" bpmnElement="Flow_1ed3lln" bioc:stroke="#205022" color:border-color="#205022">
         <di:waypoint x="1590" y="180" />
         <di:waypoint x="1665" y="180" />
       </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_0eri409_di" bpmnElement="Flow_0eri409">
+      <bpmndi:BPMNEdge id="Flow_0eri409_di" bpmnElement="Flow_0eri409" bioc:stroke="#205022" color:border-color="#205022">
         <di:waypoint x="1715" y="180" />
         <di:waypoint x="1800" y="180" />
         <bpmndi:BPMNLabel>
           <dc:Bounds x="1749" y="162" width="18" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_1ttcdez_di" bpmnElement="Flow_1ttcdez">
+      <bpmndi:BPMNEdge id="Flow_1ttcdez_di" bpmnElement="Flow_1ttcdez" bioc:stroke="#831311" color:border-color="#831311">
         <di:waypoint x="1400" y="440" />
         <di:waypoint x="1990" y="440" />
       </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_0gbzqfw_di" bpmnElement="Flow_0gbzqfw">
+      <bpmndi:BPMNEdge id="Flow_0gbzqfw_di" bpmnElement="Flow_0gbzqfw" bioc:stroke="#205022" color:border-color="#205022">
         <di:waypoint x="1900" y="180" />
         <di:waypoint x="1990" y="180" />
       </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_1hki7v2_di" bpmnElement="Flow_1hki7v2">
+      <bpmndi:BPMNEdge id="Flow_1hki7v2_di" bpmnElement="Flow_1hki7v2" bioc:stroke="#6b3c00" color:border-color="#6b3c00">
         <di:waypoint x="1690" y="205" />
         <di:waypoint x="1690" y="300" />
         <di:waypoint x="1990" y="300" />
@@ -310,15 +310,15 @@
           <dc:Bounds x="1698" y="250" width="15" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_0wm5inp_di" bpmnElement="Flow_0wm5inp">
+      <bpmndi:BPMNEdge id="Flow_0wm5inp_di" bpmnElement="Flow_0wm5inp" bioc:stroke="#831311" color:border-color="#831311">
         <di:waypoint x="2090" y="440" />
         <di:waypoint x="2182" y="440" />
       </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_1xowlfv_di" bpmnElement="Flow_1xowlfv">
+      <bpmndi:BPMNEdge id="Flow_1xowlfv_di" bpmnElement="Flow_1xowlfv" bioc:stroke="#205022" color:border-color="#205022">
         <di:waypoint x="2090" y="180" />
         <di:waypoint x="2182" y="180" />
       </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_1edkepa_di" bpmnElement="Flow_1edkepa">
+      <bpmndi:BPMNEdge id="Flow_1edkepa_di" bpmnElement="Flow_1edkepa" bioc:stroke="#6b3c00" color:border-color="#6b3c00">
         <di:waypoint x="2090" y="300" />
         <di:waypoint x="2182" y="300" />
       </bpmndi:BPMNEdge>

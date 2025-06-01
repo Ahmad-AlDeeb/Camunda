@@ -1,5 +1,9 @@
 camunda.bpm:
   admin-user:
-    id: a
-    password: a
+    id: ${CAMUNDA_ADMIN_USER_ID}
+    password: ${CAMUNDA_ADMIN_USER_PASSWORD}
   deployment-resource-pattern: "classpath*:/bpmn/*.bpmn,classpath*:/form/*.form"
+sendgrid:
+    api-key: ${SENDGRID_API_KEY}
+    from-email: ahmad.aldeeb@qeema.net
+    from-name: Qeema
