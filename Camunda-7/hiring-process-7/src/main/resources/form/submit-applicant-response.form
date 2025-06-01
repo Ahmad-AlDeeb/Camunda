@@ -1,0 +1,42 @@
+{
+  "components": [
+    {
+      "text": "# Submit Applicant's Response",
+      "type": "text",
+      "layout": {
+        "row": "Row_0303i10",
+        "columns": null
+      },
+      "id": "Field_0yvvkiy"
+    },
+    {
+      "label": "Did the applicant accept the offer?",
+      "values": [
+        {
+          "label": "Yes",
+          "value": "yes"
+        },
+        {
+          "label": "No",
+          "value": "no"
+        }
+      ],
+      "type": "radio",
+      "layout": {
+        "row": "Row_0bx2fh3",
+        "columns": null
+      },
+      "id": "Field_0otoy62",
+      "key": "isOfferAccepted"
+    }
+  ],
+  "type": "default",
+  "id": "submit-applicant-response",
+  "exporter": {
+    "name": "Camunda Modeler",
+    "version": "5.32.0"
+  },
+  "executionPlatform": "Camunda Platform",
+  "executionPlatformVersion": "7.22.0",
+  "schemaVersion": 18
+}

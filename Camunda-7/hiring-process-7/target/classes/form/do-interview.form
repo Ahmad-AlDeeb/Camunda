@@ -1,0 +1,42 @@
+{
+  "components": [
+    {
+      "text": "# Interview Results",
+      "type": "text",
+      "layout": {
+        "row": "Row_0k2o4bl",
+        "columns": null
+      },
+      "id": "Field_1bsvnzx"
+    },
+    {
+      "label": "Is the applicant a good fit?",
+      "values": [
+        {
+          "label": "Yes",
+          "value": "yes"
+        },
+        {
+          "label": "No",
+          "value": "no"
+        }
+      ],
+      "type": "radio",
+      "layout": {
+        "row": "Row_06rthtr",
+        "columns": null
+      },
+      "id": "Field_0vggaof",
+      "key": "isFit"
+    }
+  ],
+  "type": "default",
+  "id": "do-interview",
+  "exporter": {
+    "name": "Camunda Modeler",
+    "version": "5.32.0"
+  },
+  "executionPlatform": "Camunda Platform",
+  "executionPlatformVersion": "7.22.0",
+  "schemaVersion": 18
+}
