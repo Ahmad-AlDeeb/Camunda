@@ -1,3 +1,5 @@
-camunda.bpm.admin-user:
-  id: demo
-  password: demo
+camunda.bpm:
+  admin-user:
+    id: a
+    password: a
+  deployment-resource-pattern: "classpath*:/bpmn/*.bpmn,classpath*:/form/*.form"
