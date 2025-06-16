@@ -1,0 +1,45 @@
+{
+  "executionPlatform": "Camunda Cloud",
+  "executionPlatformVersion": "8.6.0",
+  "exporter": {
+    "name": "Camunda Web Modeler",
+    "version": "c60c336"
+  },
+  "schemaVersion": 18,
+  "id": "Form_DoInterview",
+  "components": [
+    {
+      "text": "# **Interview Results**",
+      "type": "text",
+      "layout": {
+        "row": "Row_1iqmhmf",
+        "columns": null
+      },
+      "id": "Field_0z35085"
+    },
+    {
+      "label": "Is the applicant a good fit?",
+      "values": [
+        {
+          "label": "Yes",
+          "value": "yes"
+        },
+        {
+          "label": "No",
+          "value": "no"
+        }
+      ],
+      "type": "radio",
+      "layout": {
+        "row": "Row_1h4uxdp",
+        "columns": null
+      },
+      "id": "Field_0sgcn3s",
+      "key": "isFit",
+      "validate": {
+        "required": true
+      }
+    }
+  ],
+  "type": "default"
+}

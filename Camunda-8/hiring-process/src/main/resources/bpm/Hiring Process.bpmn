@@ -1,0 +1,422 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:zeebe="http://camunda.org/schema/zeebe/1.0" xmlns:modeler="http://camunda.org/schema/modeler/1.0" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" id="Definitions_1" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Web Modeler" exporterVersion="6ad2448" modeler:executionPlatform="Camunda Cloud" modeler:executionPlatformVersion="8.8.0">
+  <bpmn:process id="Process_Hiring" name="Hiring Process" isExecutable="true">
+    <bpmn:startEvent id="StartEvent_ApplicationReceived" name="Application received">
+      <bpmn:outgoing>Flow_1ej7wuj</bpmn:outgoing>
+    </bpmn:startEvent>
+    <bpmn:sequenceFlow id="Flow_0b87dt8" sourceRef="Activity_CalculateCvScore" targetRef="Gateway_ScoreCheck" />
+    <bpmn:sequenceFlow id="Flow_1sxf1ao" sourceRef="Activity_DoInterview" targetRef="Gateway_IsApplicantFit" />
+    <bpmn:exclusiveGateway id="Gateway_IsApplicantFit" name="Applicant is a fit?" default="Flow_06qywxd">
+      <bpmn:incoming>Flow_1sxf1ao</bpmn:incoming>
+      <bpmn:outgoing>Flow_1aor12m</bpmn:outgoing>
+      <bpmn:outgoing>Flow_06qywxd</bpmn:outgoing>
+    </bpmn:exclusiveGateway>
+    <bpmn:sequenceFlow id="Flow_0rtjcjv" sourceRef="Activity_SendOffer" targetRef="Activity_SubmitApplicantResponse" />
+    <bpmn:endEvent id="Event_0xg2i4e" name="Applicant hired">
+      <bpmn:incoming>Flow_1vldk1c</bpmn:incoming>
+    </bpmn:endEvent>
+    <bpmn:exclusiveGateway id="Gateway_1er8xwr">
+      <bpmn:incoming>Flow_1aor12m</bpmn:incoming>
+      <bpmn:incoming>Flow_1qr4y5k</bpmn:incoming>
+      <bpmn:outgoing>Flow_1bevnqt</bpmn:outgoing>
+    </bpmn:exclusiveGateway>
+    <bpmn:sequenceFlow id="Flow_1aor12m" name="No" sourceRef="Gateway_IsApplicantFit" targetRef="Gateway_1er8xwr">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">=status = "rejected"</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="Flow_1bevnqt" sourceRef="Gateway_1er8xwr" targetRef="Activity_1twu3bv" />
+    <bpmn:endEvent id="Event_182snay" name="Applicant rejected">
+      <bpmn:incoming>Flow_0bnjdan</bpmn:incoming>
+    </bpmn:endEvent>
+    <bpmn:sequenceFlow id="Flow_0bnjdan" sourceRef="Activity_UpdateApplicationWithRejected" targetRef="Event_182snay" />
+    <bpmn:serviceTask id="Activity_UpdateApplicationWithRejected" name="Update application">
+      <bpmn:extensionElements>
+        <zeebe:taskDefinition type="UpdateApplication" />
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_10iv72r</bpmn:incoming>
+      <bpmn:outgoing>Flow_0bnjdan</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:sequenceFlow id="Flow_195q4ai" sourceRef="Activity_ScheduleInterview" targetRef="Gateway_InterviewScheduled" />
+    <bpmn:sequenceFlow id="Flow_1ej7wuj" sourceRef="StartEvent_ApplicationReceived" targetRef="Activity_CalculateCvScore" />
+    <bpmn:exclusiveGateway id="Gateway_ScoreCheck" name="Score &#62; 90?" default="Flow_1u9zuhk">
+      <bpmn:incoming>Flow_0b87dt8</bpmn:incoming>
+      <bpmn:outgoing>Flow_0onxbl3</bpmn:outgoing>
+      <bpmn:outgoing>Flow_1u9zuhk</bpmn:outgoing>
+    </bpmn:exclusiveGateway>
+    <bpmn:sequenceFlow id="Flow_0onxbl3" name="No" sourceRef="Gateway_ScoreCheck" targetRef="Gateway_1en5hkk">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">=score &lt;= 90</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:exclusiveGateway id="Gateway_InterviewScheduled" name="Interview scheduled?" default="Flow_0cvp1fn">
+      <bpmn:incoming>Flow_195q4ai</bpmn:incoming>
+      <bpmn:outgoing>Flow_0cvp1fn</bpmn:outgoing>
+      <bpmn:outgoing>Flow_12sfzbp</bpmn:outgoing>
+    </bpmn:exclusiveGateway>
+    <bpmn:sequenceFlow id="Flow_0cvp1fn" name="Yes" sourceRef="Gateway_InterviewScheduled" targetRef="Activity_SaveApplication">
+      <bpmn:extensionElements />
+    </bpmn:sequenceFlow>
+    <bpmn:exclusiveGateway id="Gateway_1en5hkk">
+      <bpmn:incoming>Flow_12sfzbp</bpmn:incoming>
+      <bpmn:incoming>Flow_0onxbl3</bpmn:incoming>
+      <bpmn:outgoing>Flow_1qr4y5k</bpmn:outgoing>
+    </bpmn:exclusiveGateway>
+    <bpmn:sequenceFlow id="Flow_1qr4y5k" sourceRef="Gateway_1en5hkk" targetRef="Gateway_1er8xwr" />
+    <bpmn:sequenceFlow id="Flow_12sfzbp" name="No" sourceRef="Gateway_InterviewScheduled" targetRef="Gateway_1en5hkk">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">=status = "rejected"
+</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:serviceTask id="Activity_SaveApplication" name="Save application">
+      <bpmn:extensionElements>
+        <zeebe:taskDefinition type="SaveApplication" />
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_0cvp1fn</bpmn:incoming>
+      <bpmn:outgoing>Flow_13jrkel</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:exclusiveGateway id="Gateway_OfferAccepted" name="Offer accepted?" default="Flow_15rs7ld">
+      <bpmn:incoming>Flow_0dewlz1</bpmn:incoming>
+      <bpmn:outgoing>Flow_15rs7ld</bpmn:outgoing>
+      <bpmn:outgoing>Flow_03p31i8</bpmn:outgoing>
+    </bpmn:exclusiveGateway>
+    <bpmn:sequenceFlow id="Flow_15rs7ld" name="Yes" sourceRef="Gateway_OfferAccepted" targetRef="Activity_SendOnboardingDetails" />
+    <bpmn:endEvent id="Event_04bnv71" name="Applicant lost">
+      <bpmn:incoming>Flow_1jb8t3m</bpmn:incoming>
+    </bpmn:endEvent>
+    <bpmn:sequenceFlow id="Flow_1jb8t3m" sourceRef="Activity_UpdateApplicationWithLost" targetRef="Event_04bnv71" />
+    <bpmn:serviceTask id="Activity_UpdateApplicationWithLost" name="Update application">
+      <bpmn:extensionElements>
+        <zeebe:taskDefinition type="UpdateApplication" />
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_03p31i8</bpmn:incoming>
+      <bpmn:outgoing>Flow_1jb8t3m</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:serviceTask id="Activity_UpdateApplicationWithHired" name="Update application">
+      <bpmn:extensionElements>
+        <zeebe:taskDefinition type="UpdateApplication" />
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_1jw9tgo</bpmn:incoming>
+      <bpmn:outgoing>Flow_1vldk1c</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:sequenceFlow id="Flow_1vldk1c" sourceRef="Activity_UpdateApplicationWithHired" targetRef="Event_0xg2i4e" />
+    <bpmn:sequenceFlow id="Flow_1jw9tgo" sourceRef="Activity_SendOnboardingDetails" targetRef="Activity_UpdateApplicationWithHired" />
+    <bpmn:sequenceFlow id="Flow_13jrkel" sourceRef="Activity_SaveApplication" targetRef="Activity_DoInterview" />
+    <bpmn:sequenceFlow id="Flow_1u9zuhk" name="Yes" sourceRef="Gateway_ScoreCheck" targetRef="Activity_ScheduleInterview" />
+    <bpmn:sequenceFlow id="Flow_0dewlz1" sourceRef="Activity_SubmitApplicantResponse" targetRef="Gateway_OfferAccepted" />
+    <bpmn:userTask id="Activity_SubmitApplicantResponse" name="Submit applicant&#39;s response">
+      <bpmn:extensionElements>
+        <zeebe:userTask />
+        <zeebe:formDefinition formId="Form_ApplicantResponseToForm" />
+        <zeebe:ioMapping>
+          <zeebe:output source="=if isOfferAccepted = &#34;no&#34; then &#34;lost&#34; else &#34;hired&#34;" target="status" />
+        </zeebe:ioMapping>
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_0rtjcjv</bpmn:incoming>
+      <bpmn:outgoing>Flow_0dewlz1</bpmn:outgoing>
+    </bpmn:userTask>
+    <bpmn:sequenceFlow id="Flow_03p31i8" name="No" sourceRef="Gateway_OfferAccepted" targetRef="Activity_UpdateApplicationWithLost">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">=status = "lost"</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:userTask id="Activity_ScheduleInterview" name="Schedule Interview">
+      <bpmn:extensionElements>
+        <zeebe:formDefinition formId="Form_scheduleInterview" />
+        <zeebe:ioMapping>
+          <zeebe:input source="=name" target="name" />
+          <zeebe:output source="=if isInterested = &#34;no&#34; then &#34;rejected&#34; else status" target="status" />
+        </zeebe:ioMapping>
+        <zeebe:userTask />
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_1u9zuhk</bpmn:incoming>
+      <bpmn:outgoing>Flow_195q4ai</bpmn:outgoing>
+    </bpmn:userTask>
+    <bpmn:userTask id="Activity_DoInterview" name="Do interview">
+      <bpmn:extensionElements>
+        <zeebe:userTask />
+        <zeebe:formDefinition formId="Form_DoInterview" />
+        <zeebe:ioMapping>
+          <zeebe:output source="=if isFit = &#34;no&#34; then &#34;rejected&#34; else status" target="status" />
+        </zeebe:ioMapping>
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_13jrkel</bpmn:incoming>
+      <bpmn:outgoing>Flow_1sxf1ao</bpmn:outgoing>
+    </bpmn:userTask>
+    <bpmn:scriptTask id="Activity_CalculateCvScore" name="Calculate CV score">
+      <bpmn:documentation>Before saving the application in the HR system, an initial screening (e.g., automated keyword matching, AI-based filtering, or manual review) can reduce unnecessary processing of unqualified candidates.</bpmn:documentation>
+      <bpmn:extensionElements>
+        <zeebe:taskDefinition type="CalculateCvScore" />
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_1ej7wuj</bpmn:incoming>
+      <bpmn:outgoing>Flow_0b87dt8</bpmn:outgoing>
+    </bpmn:scriptTask>
+    <bpmn:sequenceFlow id="Flow_06qywxd" name="Yes" sourceRef="Gateway_IsApplicantFit" targetRef="Activity_SendOffer" />
+    <bpmn:serviceTask id="Activity_SendOffer" name="Send offer" zeebe:modelerTemplate="io.camunda.connectors.SendGrid.v2" zeebe:modelerTemplateVersion="4" zeebe:modelerTemplateIcon="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTYiIGhlaWdodD0iMTYiIHZpZXdCb3g9IjAgMCAxNiAxNiIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KICAgIDxwYXRoIGQ9Ik0wLjI4NTcwNiA1LjQwODQ3SDUuNDM4MzdWMTAuNTYxMUgwLjI4NTcwNlY1LjQwODQ3WiIgZmlsbD0id2hpdGUiLz4KICAgIDxwYXRoIGQ9Ik0wLjI4NTcwNiA1LjQwODQ3SDUuNDM4MzdWMTAuNTYxMUgwLjI4NTcwNlY1LjQwODQ3WiIgZmlsbD0iIzk5RTFGNCIvPgogICAgPHBhdGggZD0iTTUuNDM4MzcgMTAuNTYxMUwxMC41NjExIDEwLjU2MTZWMTUuNjg0NEg1LjQzODM3VjEwLjU2MTFaIiBmaWxsPSJ3aGl0ZSIvPgogICAgPHBhdGggZD0iTTUuNDM4MzcgMTAuNTYxMUwxMC41NjExIDEwLjU2MTZWMTUuNjg0NEg1LjQzODM3VjEwLjU2MTFaIiBmaWxsPSIjOTlFMUY0Ii8+CiAgICA8cGF0aCBkPSJNMC4yODU3MDYgMTUuNjg0Nkw1LjQzODM3IDE1LjY4NDRWMTUuNzE0M0gwLjI4NTcwNlYxNS42ODQ2Wk0wLjI4NTcwNiAxMC41NjE5SDUuNDM4MzdWMTUuNjg0NEwwLjI4NTcwNiAxNS42ODQ2VjEwLjU2MTlaIiBmaWxsPSIjMUE4MkUyIi8+CiAgICA8cGF0aCBkPSJNNS40MzgzNyAwLjI4NTcwNkgxMC41NjExVjUuNDA4NDdINS40MzgzN1YwLjI4NTcwNlpNMTAuNTYxNiA1LjQzODM3SDE1LjcxNDNWMTAuNTYxMUgxMC41NjE2VjUuNDM4MzdaIiBmaWxsPSIjMDBCM0UzIi8+CiAgICA8cGF0aCBkPSJNNS40MzgzNyAxMC41NjExTDEwLjU2MTEgMTAuNTYxNlY1LjQwODQ3SDUuNDM4MzdWMTAuNTYxMVoiIGZpbGw9IiMwMDlERDkiLz4KICAgIDxwYXRoIGQ9Ik0xMC41NjExIDAuMjg1NzA2SDE1LjcxNDNWNS40MDg0N0gxMC41NjExVjAuMjg1NzA2WiIgZmlsbD0iIzFBODJFMiIvPgogICAgPHBhdGggZD0iTTEwLjU2MTEgNS40MDg0N0gxNS43MTQzVjUuNDM4MzdIMTAuNTYxNkwxMC41NjExIDUuNDA4NDdaIiBmaWxsPSIjMUE4MkUyIi8+Cjwvc3ZnPg==">
+      <bpmn:extensionElements>
+        <zeebe:taskDefinition type="io.camunda:sendgrid:1" retries="3" />
+        <zeebe:ioMapping>
+          <zeebe:input source="{{secrets.SENDGRID_API_KEY}}" target="apiKey" />
+          <zeebe:input source="Qeema" target="from.name" />
+          <zeebe:input source="ahmad.aldeeb@qeema.net" target="from.email" />
+          <zeebe:input source="Ahmad Al-Deeb" target="to.name" />
+          <zeebe:input source="ahmeddeeb22222@gmail.com" target="to.email" />
+          <zeebe:input source="mail" target="unMappedFieldNotUseInModel.mailType" />
+          <zeebe:input source="Email with Button" target="content.subject" />
+          <zeebe:input source="text/html" target="content.type" />
+          <zeebe:input source="&#60;!DOCTYPE html&#62;&#10;&#60;html&#62;&#10;  &#60;body&#62;&#10;    &#60;p&#62;Hello,&#60;/p&#62;&#10;    &#60;p&#62;Click the button below to proceed with the action:&#60;/p&#62;&#10;&#10;    &#60;a href=&#34;https://your-app.com/api/trigger&#34; &#10;       style=&#34;display: inline-block; padding: 10px 20px; background-color: #007bff; color: #ffffff; text-decoration: none; border-radius: 5px;&#34;&#62;&#10;      Trigger Action&#10;    &#60;/a&#62;&#10;&#10;    &#60;p&#62;If the button doesn&#39;t work, you can also &#60;a href=&#34;https://your-app.com/api/trigger&#34;&#62;click this link&#60;/a&#62;.&#60;/p&#62;&#10;&#10;    &#60;p&#62;Thanks,&#60;br&#62;Your Team&#60;/p&#62;&#10;  &#60;/body&#62;&#10;&#60;/html&#62;&#10;" target="content.value" />
+        </zeebe:ioMapping>
+        <zeebe:taskHeaders>
+          <zeebe:header key="retryBackoff" value="PT0S" />
+        </zeebe:taskHeaders>
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_06qywxd</bpmn:incoming>
+      <bpmn:outgoing>Flow_0rtjcjv</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:serviceTask id="Activity_1twu3bv" name="Send rejection" zeebe:modelerTemplate="io.camunda.connectors.SendGrid.v2" zeebe:modelerTemplateVersion="4" zeebe:modelerTemplateIcon="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTYiIGhlaWdodD0iMTYiIHZpZXdCb3g9IjAgMCAxNiAxNiIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KICAgIDxwYXRoIGQ9Ik0wLjI4NTcwNiA1LjQwODQ3SDUuNDM4MzdWMTAuNTYxMUgwLjI4NTcwNlY1LjQwODQ3WiIgZmlsbD0id2hpdGUiLz4KICAgIDxwYXRoIGQ9Ik0wLjI4NTcwNiA1LjQwODQ3SDUuNDM4MzdWMTAuNTYxMUgwLjI4NTcwNlY1LjQwODQ3WiIgZmlsbD0iIzk5RTFGNCIvPgogICAgPHBhdGggZD0iTTUuNDM4MzcgMTAuNTYxMUwxMC41NjExIDEwLjU2MTZWMTUuNjg0NEg1LjQzODM3VjEwLjU2MTFaIiBmaWxsPSJ3aGl0ZSIvPgogICAgPHBhdGggZD0iTTUuNDM4MzcgMTAuNTYxMUwxMC41NjExIDEwLjU2MTZWMTUuNjg0NEg1LjQzODM3VjEwLjU2MTFaIiBmaWxsPSIjOTlFMUY0Ii8+CiAgICA8cGF0aCBkPSJNMC4yODU3MDYgMTUuNjg0Nkw1LjQzODM3IDE1LjY4NDRWMTUuNzE0M0gwLjI4NTcwNlYxNS42ODQ2Wk0wLjI4NTcwNiAxMC41NjE5SDUuNDM4MzdWMTUuNjg0NEwwLjI4NTcwNiAxNS42ODQ2VjEwLjU2MTlaIiBmaWxsPSIjMUE4MkUyIi8+CiAgICA8cGF0aCBkPSJNNS40MzgzNyAwLjI4NTcwNkgxMC41NjExVjUuNDA4NDdINS40MzgzN1YwLjI4NTcwNlpNMTAuNTYxNiA1LjQzODM3SDE1LjcxNDNWMTAuNTYxMUgxMC41NjE2VjUuNDM4MzdaIiBmaWxsPSIjMDBCM0UzIi8+CiAgICA8cGF0aCBkPSJNNS40MzgzNyAxMC41NjExTDEwLjU2MTEgMTAuNTYxNlY1LjQwODQ3SDUuNDM4MzdWMTAuNTYxMVoiIGZpbGw9IiMwMDlERDkiLz4KICAgIDxwYXRoIGQ9Ik0xMC41NjExIDAuMjg1NzA2SDE1LjcxNDNWNS40MDg0N0gxMC41NjExVjAuMjg1NzA2WiIgZmlsbD0iIzFBODJFMiIvPgogICAgPHBhdGggZD0iTTEwLjU2MTEgNS40MDg0N0gxNS43MTQzVjUuNDM4MzdIMTAuNTYxNkwxMC41NjExIDUuNDA4NDdaIiBmaWxsPSIjMUE4MkUyIi8+Cjwvc3ZnPg==">
+      <bpmn:extensionElements>
+        <zeebe:taskDefinition type="io.camunda:sendgrid:1" retries="3" />
+        <zeebe:ioMapping>
+          <zeebe:input source="{{secrets.SENDGRID_API_KEY}}" target="apiKey" />
+          <zeebe:input source="Qeema" target="from.name" />
+          <zeebe:input source="ahmad.aldeeb@qeema.net" target="from.email" />
+          <zeebe:input source="Ahmad Al-Deeb" target="to.name" />
+          <zeebe:input source="ahmeddeeb22222@gmail.com" target="to.email" />
+          <zeebe:input source="mail" target="unMappedFieldNotUseInModel.mailType" />
+          <zeebe:input source="Your Application at Qeema" target="content.subject" />
+          <zeebe:input source="text/plain" target="content.type" />
+          <zeebe:input source="Dear,&#10;&#10;Thank you for your interest in the Integration Engineer position at **Qeema**, and for the time and effort you put into the interview process.&#10;&#10;After careful consideration, we regret to inform you that we will not be moving forward with your application at this time. This decision was not easy due to the high quality of candidates we had the privilege of meeting, including yourself.&#10;&#10;We sincerely appreciate your interest in joining Qeema and encourage you to apply for future opportunities that align with your skills and experience. We wish you all the best in your career journey ahead.&#10;&#10;Warm regards,  &#10;Qeema" target="content.value" />
+        </zeebe:ioMapping>
+        <zeebe:taskHeaders>
+          <zeebe:header key="retryBackoff" value="PT0S" />
+        </zeebe:taskHeaders>
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_1bevnqt</bpmn:incoming>
+      <bpmn:outgoing>Flow_10iv72r</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:sequenceFlow id="Flow_10iv72r" sourceRef="Activity_1twu3bv" targetRef="Activity_UpdateApplicationWithRejected" />
+    <bpmn:serviceTask id="Activity_SendOnboardingDetails" name="Send onboarding details" zeebe:modelerTemplate="io.camunda.connectors.WhatsApp.v1" zeebe:modelerTemplateVersion="2" zeebe:modelerTemplateIcon="data:image/svg+xml,%3Csvg xmlns=&#39;http://www.w3.org/2000/svg&#39; width=&#39;18&#39; height=&#39;18&#39; viewBox=&#39;0 0 175.216 175.552&#39;%3E%3Cdefs%3E%3ClinearGradient id=&#39;b&#39; x1=&#39;85.915&#39; x2=&#39;86.535&#39; y1=&#39;32.567&#39; y2=&#39;137.092&#39; gradientUnits=&#39;userSpaceOnUse&#39;%3E%3Cstop offset=&#39;0&#39; stop-color=&#39;%2357d163&#39;/%3E%3Cstop offset=&#39;1&#39; stop-color=&#39;%2323b33a&#39;/%3E%3C/linearGradient%3E%3Cfilter id=&#39;a&#39; width=&#39;1.115&#39; height=&#39;1.114&#39; x=&#39;-.057&#39; y=&#39;-.057&#39; color-interpolation-filters=&#39;sRGB&#39;%3E%3CfeGaussianBlur stdDeviation=&#39;3.531&#39;/%3E%3C/filter%3E%3C/defs%3E%3Cpath fill=&#39;%23b3b3b3&#39; d=&#39;m54.532 138.45 2.235 1.324c9.387 5.571 20.15 8.518 31.126 8.523h.023c33.707 0 61.139-27.426 61.153-61.135.006-16.335-6.349-31.696-17.895-43.251A60.75 60.75 0 0 0 87.94 25.983c-33.733 0-61.166 27.423-61.178 61.13a60.98 60.98 0 0 0 9.349 32.535l1.455 2.312-6.179 22.558zm-40.811 23.544L24.16 123.88c-6.438-11.154-9.825-23.808-9.821-36.772.017-40.556 33.021-73.55 73.578-73.55 19.681.01 38.154 7.669 52.047 21.572s21.537 32.383 21.53 52.037c-.018 40.553-33.027 73.553-73.578 73.553h-.032c-12.313-.005-24.412-3.094-35.159-8.954zm0 0&#39; filter=&#39;url(%23a)&#39;/%3E%3Cpath fill=&#39;%23fff&#39; d=&#39;m12.966 161.238 10.439-38.114a73.42 73.42 0 0 1-9.821-36.772c.017-40.556 33.021-73.55 73.578-73.55 19.681.01 38.154 7.669 52.047 21.572s21.537 32.383 21.53 52.037c-.018 40.553-33.027 73.553-73.578 73.553h-.032c-12.313-.005-24.412-3.094-35.159-8.954z&#39;/%3E%3Cpath fill=&#39;url(%23linearGradient1780)&#39; d=&#39;M87.184 25.227c-33.733 0-61.166 27.423-61.178 61.13a60.98 60.98 0 0 0 9.349 32.535l1.455 2.312-6.179 22.559 23.146-6.069 2.235 1.324c9.387 5.571 20.15 8.518 31.126 8.524h.023c33.707 0 61.14-27.426 61.153-61.135a60.75 60.75 0 0 0-17.895-43.251 60.75 60.75 0 0 0-43.235-17.929z&#39;/%3E%3Cpath fill=&#39;url(%23b)&#39; d=&#39;M87.184 25.227c-33.733 0-61.166 27.423-61.178 61.13a60.98 60.98 0 0 0 9.349 32.535l1.455 2.313-6.179 22.558 23.146-6.069 2.235 1.324c9.387 5.571 20.15 8.517 31.126 8.523h.023c33.707 0 61.14-27.426 61.153-61.135a60.75 60.75 0 0 0-17.895-43.251 60.75 60.75 0 0 0-43.235-17.928z&#39;/%3E%3Cpath fill=&#39;%23fff&#39; fill-rule=&#39;evenodd&#39; d=&#39;M68.772 55.603c-1.378-3.061-2.828-3.123-4.137-3.176l-3.524-.043c-1.226 0-3.218.46-4.902 2.3s-6.435 6.287-6.435 15.332 6.588 17.785 7.506 19.013 12.718 20.381 31.405 27.75c15.529 6.124 18.689 4.906 22.061 4.6s10.877-4.447 12.408-8.74 1.532-7.971 1.073-8.74-1.685-1.226-3.525-2.146-10.877-5.367-12.562-5.981-2.91-.919-4.137.921-4.746 5.979-5.819 7.206-2.144 1.381-3.984.462-7.76-2.861-14.784-9.124c-5.465-4.873-9.154-10.891-10.228-12.73s-.114-2.835.808-3.751c.825-.824 1.838-2.147 2.759-3.22s1.224-1.84 1.836-3.065.307-2.301-.153-3.22-4.032-10.011-5.666-13.647&#39;/%3E%3C/svg%3E">
+      <bpmn:extensionElements>
+        <zeebe:taskDefinition type="io.camunda:http-json:1" />
+        <zeebe:ioMapping>
+          <zeebe:input source="{{secrets.TOKEN}}" target="authentication.token" />
+          <zeebe:input source="661486303705385" target="senderPhoneId" />
+          <zeebe:input source="201206715400" target="recipientPhoneNumber" />
+          <zeebe:input source="plainText" target="messageType" />
+          <zeebe:input source="=&#34;Welcome onboard, &#34; + name + &#34;! 🎉&#34;" target="messageBody" />
+          <zeebe:input source="bearer" target="authentication.type" />
+          <zeebe:input source="post" target="method" />
+          <zeebe:input source="=&#34;https://graph.facebook.com/v17.0/&#34;+senderPhoneId+&#34;/messages&#34;" target="url" />
+          <zeebe:input source="={&#34;messaging_product&#34;:&#34;whatsapp&#34;,&#34;recipient_type&#34;:&#34;individual&#34;,&#34;to&#34;:recipientPhoneNumber,&#34;type&#34;:&#34;text&#34;, &#34;text&#34;:{&#34;preview_url&#34;:false, &#34;body&#34;:messageBody}}" target="body" />
+        </zeebe:ioMapping>
+        <zeebe:taskHeaders />
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_15rs7ld</bpmn:incoming>
+      <bpmn:outgoing>Flow_1jw9tgo</bpmn:outgoing>
+    </bpmn:serviceTask>
+  </bpmn:process>
+  <bpmndi:BPMNDiagram id="BPMNDiagram_1">
+    <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="Process_Hiring">
+      <bpmndi:BPMNShape id="_BPMNShape_StartEvent_2" bpmnElement="StartEvent_ApplicationReceived">
+        <dc:Bounds x="182" y="212" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="174" y="255" width="53" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Gateway_0z1h2by_di" bpmnElement="Gateway_IsApplicantFit" isMarkerVisible="true">
+        <dc:Bounds x="1158" y="205" width="50" height="50" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1142" y="183" width="83" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_0xg2i4e_di" bpmnElement="Event_0xg2i4e">
+        <dc:Bounds x="1982" y="212" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1964" y="255" width="72" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Gateway_1er8xwr_di" bpmnElement="Gateway_1er8xwr" isMarkerVisible="true">
+        <dc:Bounds x="1158" y="465" width="50" height="50" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_182snay_di" bpmnElement="Event_182snay">
+        <dc:Bounds x="1982" y="472" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1957" y="515" width="87" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_1ld2nbp_di" bpmnElement="Activity_UpdateApplicationWithRejected">
+        <dc:Bounds x="1823" y="450" width="100" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Gateway_0jrbet3_di" bpmnElement="Gateway_ScoreCheck" isMarkerVisible="true">
+        <dc:Bounds x="443" y="205" width="50" height="50" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="438" y="175" width="60" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Gateway_1illnhz_di" bpmnElement="Gateway_InterviewScheduled" isMarkerVisible="true">
+        <dc:Bounds x="713" y="205" width="50" height="50" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="710" y="175" width="57" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Gateway_1en5hkk_di" bpmnElement="Gateway_1en5hkk" isMarkerVisible="true">
+        <dc:Bounds x="713" y="465" width="50" height="50" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_1c4ilbc_di" bpmnElement="Activity_SaveApplication">
+        <dc:Bounds x="838" y="190" width="100" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Gateway_0pjcuzh_di" bpmnElement="Gateway_OfferAccepted" isMarkerVisible="true">
+        <dc:Bounds x="1578" y="205" width="50" height="50" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1563" y="182" width="79" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_04bnv71_di" bpmnElement="Event_04bnv71">
+        <dc:Bounds x="1982" y="342" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1968" y="385" width="66" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_0l8cz49_di" bpmnElement="Activity_UpdateApplicationWithLost">
+        <dc:Bounds x="1823" y="320" width="100" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="BPMNShape_165aaih" bpmnElement="Activity_UpdateApplicationWithHired">
+        <dc:Bounds x="1823" y="190" width="100" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_0zizf75_di" bpmnElement="Activity_SubmitApplicantResponse">
+        <dc:Bounds x="1430" y="190" width="100" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_04sng22_di" bpmnElement="Activity_ScheduleInterview">
+        <dc:Bounds x="558" y="190" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_0nzqfr3_di" bpmnElement="Activity_DoInterview">
+        <dc:Bounds x="1003" y="190" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_0h9b4xj_di" bpmnElement="Activity_CalculateCvScore">
+        <dc:Bounds x="278" y="190" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_10gh12a_di" bpmnElement="Activity_SendOffer">
+        <dc:Bounds x="1283" y="190" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="BPMNShape_129lxzy" bpmnElement="Activity_1twu3bv">
+        <dc:Bounds x="1283" y="450" width="100" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_1v7p92k_di" bpmnElement="Activity_SendOnboardingDetails">
+        <dc:Bounds x="1680" y="190" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="Flow_0b87dt8_di" bpmnElement="Flow_0b87dt8">
+        <di:waypoint x="378" y="230" />
+        <di:waypoint x="443" y="230" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1sxf1ao_di" bpmnElement="Flow_1sxf1ao">
+        <di:waypoint x="1103" y="230" />
+        <di:waypoint x="1158" y="230" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0rtjcjv_di" bpmnElement="Flow_0rtjcjv">
+        <di:waypoint x="1383" y="230" />
+        <di:waypoint x="1430" y="230" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1aor12m_di" bpmnElement="Flow_1aor12m">
+        <di:waypoint x="1183" y="255" />
+        <di:waypoint x="1183" y="465" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1195" y="254" width="15" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1bevnqt_di" bpmnElement="Flow_1bevnqt">
+        <di:waypoint x="1208" y="490" />
+        <di:waypoint x="1283" y="490" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0bnjdan_di" bpmnElement="Flow_0bnjdan">
+        <di:waypoint x="1923" y="490" />
+        <di:waypoint x="1982" y="490" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_195q4ai_di" bpmnElement="Flow_195q4ai">
+        <di:waypoint x="658" y="230" />
+        <di:waypoint x="713" y="230" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1ej7wuj_di" bpmnElement="Flow_1ej7wuj">
+        <di:waypoint x="218" y="230" />
+        <di:waypoint x="278" y="230" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0onxbl3_di" bpmnElement="Flow_0onxbl3">
+        <di:waypoint x="468" y="255" />
+        <di:waypoint x="468" y="490" />
+        <di:waypoint x="713" y="490" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="476" y="261" width="15" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0cvp1fn_di" bpmnElement="Flow_0cvp1fn">
+        <di:waypoint x="763" y="230" />
+        <di:waypoint x="838" y="230" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="769" y="212" width="18" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1qr4y5k_di" bpmnElement="Flow_1qr4y5k">
+        <di:waypoint x="763" y="490" />
+        <di:waypoint x="1158" y="490" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_12sfzbp_di" bpmnElement="Flow_12sfzbp">
+        <di:waypoint x="738" y="255" />
+        <di:waypoint x="738" y="465" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="746" y="260" width="15" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_15rs7ld_di" bpmnElement="Flow_15rs7ld">
+        <di:waypoint x="1628" y="230" />
+        <di:waypoint x="1680" y="230" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1624" y="212" width="18" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1jb8t3m_di" bpmnElement="Flow_1jb8t3m">
+        <di:waypoint x="1923" y="360" />
+        <di:waypoint x="1982" y="360" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1vldk1c_di" bpmnElement="Flow_1vldk1c">
+        <di:waypoint x="1923" y="230" />
+        <di:waypoint x="1982" y="230" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1jw9tgo_di" bpmnElement="Flow_1jw9tgo">
+        <di:waypoint x="1780" y="230" />
+        <di:waypoint x="1823" y="230" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_13jrkel_di" bpmnElement="Flow_13jrkel">
+        <di:waypoint x="938" y="230" />
+        <di:waypoint x="1003" y="230" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1u9zuhk_di" bpmnElement="Flow_1u9zuhk">
+        <di:waypoint x="493" y="230" />
+        <di:waypoint x="558" y="230" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="495" y="212" width="18" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0dewlz1_di" bpmnElement="Flow_0dewlz1">
+        <di:waypoint x="1530" y="230" />
+        <di:waypoint x="1578" y="230" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_03p31i8_di" bpmnElement="Flow_03p31i8">
+        <di:waypoint x="1603" y="255" />
+        <di:waypoint x="1603" y="360" />
+        <di:waypoint x="1823" y="360" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1611" y="262" width="15" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_06qywxd_di" bpmnElement="Flow_06qywxd">
+        <di:waypoint x="1208" y="230" />
+        <di:waypoint x="1283" y="230" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1237" y="212" width="18" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_10iv72r_di" bpmnElement="Flow_10iv72r">
+        <di:waypoint x="1383" y="490" />
+        <di:waypoint x="1823" y="490" />
+      </bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</bpmn:definitions>

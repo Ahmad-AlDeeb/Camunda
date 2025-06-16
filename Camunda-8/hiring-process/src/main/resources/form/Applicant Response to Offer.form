@@ -1,0 +1,45 @@
+{
+  "executionPlatform": "Camunda Cloud",
+  "executionPlatformVersion": "8.6.0",
+  "exporter": {
+    "name": "Camunda Web Modeler",
+    "version": "c60c336"
+  },
+  "schemaVersion": 18,
+  "id": "Form_ApplicantResponseToForm",
+  "components": [
+    {
+      "text": "# **Applicant's Response**",
+      "type": "text",
+      "layout": {
+        "row": "Row_0nweddw",
+        "columns": null
+      },
+      "id": "Field_0vorq8j"
+    },
+    {
+      "label": "Did applicant accept offer?",
+      "values": [
+        {
+          "label": "Yes",
+          "value": "yes"
+        },
+        {
+          "label": "No",
+          "value": "no"
+        }
+      ],
+      "type": "radio",
+      "layout": {
+        "row": "Row_07z1sem",
+        "columns": null
+      },
+      "id": "Field_1q2minv",
+      "key": "isOfferAccepted",
+      "validate": {
+        "required": true
+      }
+    }
+  ],
+  "type": "default"
+}

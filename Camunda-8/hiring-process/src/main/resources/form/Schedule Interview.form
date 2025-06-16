@@ -1,0 +1,51 @@
+{
+  "executionPlatform": "Camunda Cloud",
+  "executionPlatformVersion": "8.6.0",
+  "exporter": {
+    "name": "Camunda Web Modeler",
+    "version": "6ad2448"
+  },
+  "schemaVersion": 18,
+  "id": "Form_scheduleInterview",
+  "components": [
+    {
+      "text": "=\"Scheduling Interview with  \" + name",
+      "type": "text",
+      "layout": {
+        "row": "Row_15mnvjl",
+        "columns": 14
+      },
+      "id": "Field_1tuh29v",
+      "properties": {
+        "name": "{name}"
+      }
+    },
+    {
+      "label": "Was Interview Scheduled?",
+      "values": [
+        {
+          "label": "Yes",
+          "value": "yes"
+        },
+        {
+          "label": "No",
+          "value": "no"
+        }
+      ],
+      "type": "radio",
+      "layout": {
+        "row": "Row_1b3yrwp",
+        "columns": null
+      },
+      "id": "Field_123x8mi",
+      "key": "isInterested",
+      "validate": {
+        "required": true
+      },
+      "properties": {
+        "key1": "value"
+      }
+    }
+  ],
+  "type": "default"
+}

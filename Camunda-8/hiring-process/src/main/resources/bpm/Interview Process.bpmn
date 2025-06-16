@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:zeebe="http://camunda.org/schema/zeebe/1.0" xmlns:modeler="http://camunda.org/schema/modeler/1.0" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" id="Definitions_1" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Web Modeler" exporterVersion="f874d92" modeler:executionPlatform="Camunda Cloud" modeler:executionPlatformVersion="8.6.0">
+  <bpmn:process id="Process_0osfeci" name="Interview Process" isExecutable="true">
+    <bpmn:startEvent id="StartEvent_1" name="Interview scheduled">
+      <bpmn:outgoing>Flow_0lvtce8</bpmn:outgoing>
+    </bpmn:startEvent>
+    <bpmn:sequenceFlow id="Flow_0lvtce8" sourceRef="StartEvent_1" targetRef="Activity_0c5zmdn" />
+    <bpmn:sequenceFlow id="Flow_1q1hwfj" sourceRef="Activity_0c5zmdn" targetRef="Activity_0xearp5" />
+    <bpmn:sequenceFlow id="Flow_0td2imp" sourceRef="Activity_0xearp5" targetRef="Activity_1tiythe" />
+    <bpmn:endEvent id="Event_0du90fi" name="Interview ended">
+      <bpmn:incoming>Flow_1fc7b0s</bpmn:incoming>
+    </bpmn:endEvent>
+    <bpmn:sequenceFlow id="Flow_1fc7b0s" sourceRef="Activity_1tiythe" targetRef="Event_0du90fi" />
+    <bpmn:manualTask id="Activity_0c5zmdn" name="Do technical interview">
+      <bpmn:incoming>Flow_0lvtce8</bpmn:incoming>
+      <bpmn:outgoing>Flow_1q1hwfj</bpmn:outgoing>
+    </bpmn:manualTask>
+    <bpmn:userTask id="Activity_0xearp5" name="Submit results of the interview">
+      <bpmn:extensionElements>
+        <zeebe:userTask />
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_1q1hwfj</bpmn:incoming>
+      <bpmn:outgoing>Flow_0td2imp</bpmn:outgoing>
+    </bpmn:userTask>
+    <bpmn:serviceTask id="Activity_1tiythe" name="Update application in HR system">
+      <bpmn:incoming>Flow_0td2imp</bpmn:incoming>
+      <bpmn:outgoing>Flow_1fc7b0s</bpmn:outgoing>
+    </bpmn:serviceTask>
+  </bpmn:process>
+  <bpmndi:BPMNDiagram id="BPMNDiagram_1">
+    <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="Process_0osfeci">
+      <bpmndi:BPMNShape id="_BPMNShape_StartEvent_2" bpmnElement="StartEvent_1">
+        <dc:Bounds x="150" y="100" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="143" y="143" width="51" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_0du90fi_di" bpmnElement="Event_0du90fi">
+        <dc:Bounds x="722" y="100" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="701" y="143" width="78" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_1holmsu_di" bpmnElement="Activity_0c5zmdn">
+        <dc:Bounds x="240" y="78" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_1mbt6qj_di" bpmnElement="Activity_0xearp5">
+        <dc:Bounds x="400" y="78" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_1id4r7c_di" bpmnElement="Activity_1tiythe">
+        <dc:Bounds x="560" y="78" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="Flow_0lvtce8_di" bpmnElement="Flow_0lvtce8">
+        <di:waypoint x="186" y="118" />
+        <di:waypoint x="240" y="118" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1q1hwfj_di" bpmnElement="Flow_1q1hwfj">
+        <di:waypoint x="340" y="118" />
+        <di:waypoint x="400" y="118" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0td2imp_di" bpmnElement="Flow_0td2imp">
+        <di:waypoint x="500" y="118" />
+        <di:waypoint x="560" y="118" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1fc7b0s_di" bpmnElement="Flow_1fc7b0s">
+        <di:waypoint x="660" y="118" />
+        <di:waypoint x="722" y="118" />
+      </bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</bpmn:definitions>
