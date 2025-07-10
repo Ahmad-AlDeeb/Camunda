@@ -1,5 +1,6 @@
 package com.deeb.hiringprocess.service;
 
+import io.micrometer.tracing.annotation.NewSpan;
 import jakarta.inject.Named;
 import lombok.AllArgsConstructor;
 import org.camunda.bpm.engine.delegate.DelegateExecution;
@@ -17,6 +18,7 @@ public class SendOfferDelegate implements JavaDelegate {
             "Congratulations! We are pleased to offer you the position. Please review the attached offer letter.";
 
     @Override
+    @NewSpan("sendOffer")
     public void execute(DelegateExecution execution) throws Exception {
         emailDispatcher.dispatchEmail(TO_EMAIL, SUBJECT, BODY);
     }

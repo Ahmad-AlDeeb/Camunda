@@ -1,6 +1,7 @@
 package com.deeb.hiringprocess.service;
 
 import com.deeb.hiringprocess.sendgrid.EmailDispatcher;
+import io.micrometer.tracing.annotation.NewSpan;
 import jakarta.inject.Named;
 import lombok.AllArgsConstructor;
 import org.camunda.bpm.engine.delegate.DelegateExecution;
@@ -17,6 +18,7 @@ public class SendReminderDelegate implements JavaDelegate {
     private static final String BODY = "Dear Applicant, this is a gentle reminder to respond to your job application.";
 
     @Override
+    @NewSpan("sendReminder")
     public void execute(DelegateExecution execution) throws Exception {
         emailDispatcher.dispatchEmail(TO_EMAIL, SUBJECT, BODY);
     }

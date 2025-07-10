@@ -1,6 +1,7 @@
 package com.deeb.hiringprocess.service;
 
 import com.deeb.hiringprocess.sendgrid.EmailDispatcher;
+import io.micrometer.tracing.annotation.NewSpan;
 import jakarta.inject.Named;
 import lombok.AllArgsConstructor;
 import org.camunda.bpm.engine.delegate.DelegateExecution;
@@ -16,6 +17,7 @@ public class SendRejectionDelegate implements JavaDelegate {
     private static final String BODY = "Thank you for your interest in the position. Unfortunately, ...";
 
     @Override
+    @NewSpan("sendRejection")
     public void execute(DelegateExecution execution) throws Exception {
         emailDispatcher.dispatchEmail(TO_EMAIL, SUBJECT, BODY);
     }

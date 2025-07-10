@@ -1,3 +1,6 @@
+spring:
+  application:
+    name: hiring-process-7
 camunda.bpm:
   admin-user:
     id: ${CAMUNDA_ADMIN_USER_ID}
@@ -7,3 +10,21 @@ sendgrid:
     api-key: ${SENDGRID_API_KEY}
     from-email: ahmad.aldeeb@qeema.net
     from-name: Qeema
+# Actuator
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+  endpoint:
+    health:
+      show-details: always
+# Jaeger
+  tracing:
+    sampling:
+      probability: 1.0
+  observations:
+    annotations:
+      enabled: true
+tracing:
+  url: http://localhost:4317
