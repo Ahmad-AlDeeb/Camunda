@@ -1,6 +1,9 @@
+server:
+  port: 7070
 spring:
   application:
     name: hiring-process-7
+# Camunda
 camunda.bpm:
   admin-user:
     id: ${CAMUNDA_ADMIN_USER_ID}
