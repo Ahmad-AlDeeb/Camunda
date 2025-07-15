@@ -20,13 +20,13 @@ public class Logging {
     private static final String INDENT = "    ";
 
     private static final String BEFORE_MESSAGE =
-            CYAN + "\n--> Executing: {}\n" + INDENT + "Arguments: [{}]" + RESET;
+            CYAN + "--> Executing: {}" + INDENT + "Arguments: [{}]" + RESET;
 
     private static final String AFTER_RETURN_MESSAGE =
-            GREEN + "\n<-- Completed: {}\n" + INDENT + "Returned: [{}]" + RESET;
+            GREEN + "<-- Completed: {}" + INDENT + "Returned: [{}]" + RESET;
 
     private static final String AFTER_THROW_MESSAGE =
-            RED + "\n!!! Exception in: {}\n" + INDENT + "Cause: [{}]" + RESET;
+            RED + "!!! Exception in: {}" + INDENT + "Cause: [{}]" + RESET;
 
     private static String getMethodName(JoinPoint joinPoint) {
         return joinPoint.getSignature().toShortString();
