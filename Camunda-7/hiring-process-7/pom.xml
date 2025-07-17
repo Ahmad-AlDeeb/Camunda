@@ -79,11 +79,8 @@
       <groupId>io.micrometer</groupId>
       <artifactId>micrometer-registry-prometheus</artifactId>
     </dependency>
-    <dependency>
-      <groupId>com.github.loki4j</groupId>
-      <artifactId>loki-logback-appender</artifactId>
-      <version>1.4.1</version>
-    </dependency>
+
+    <!-- Traces -->
     <dependency>
       <groupId>io.micrometer</groupId>
       <artifactId>micrometer-tracing-bridge-otel</artifactId>
@@ -100,7 +97,17 @@
       <plugin>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-maven-plugin</artifactId>
-        <version>3.4.4</version>
+        <configuration>
+          <mainClass>com.deeb.hiringprocess.HiringProcess</mainClass>
+          <layout>JAR</layout>
+        </configuration>
+        <executions>
+          <execution>
+            <goals>
+              <goal>repackage</goal>
+            </goals>
+          </execution>
+        </executions>
       </plugin>
     </plugins>
   </build>

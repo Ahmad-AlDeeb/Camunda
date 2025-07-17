@@ -6,8 +6,8 @@ spring:
 # Camunda
 camunda.bpm:
   admin-user:
-    id: ${CAMUNDA_ADMIN_USER_ID}
-    password: ${CAMUNDA_ADMIN_USER_PASSWORD}
+    id: a
+    password: a
   deployment-resource-pattern: "classpath*:/bpmn/*.bpmn,classpath*:/form/*.form"
 sendgrid:
     api-key: ${SENDGRID_API_KEY}
@@ -30,4 +30,4 @@ management:
     annotations:
       enabled: true
 tracing:
-  url: http://localhost:4317
+  url: http://172.18.0.2:30001

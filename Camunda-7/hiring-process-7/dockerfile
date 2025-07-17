@@ -1,0 +1,19 @@
+FROM maven:3.9.6-eclipse-temurin-21 AS build
+WORKDIR /app
+
+COPY pom.xml .
+COPY src ./src
+
+RUN mvn package spring-boot:repackage
+
+# Create logs directory and set permissions for non-root usage
+RUN mkdir -p /app-distroless/logs \
+    && cp target/hiring-process-7.jar /app-distroless/ \
+    && chmod -R 777 /app-distroless/logs  # <-- Make logs directory writable
+
+FROM gcr.io/distroless/java21:nonroot
+WORKDIR /app
+
+COPY --from=build /app-distroless /app
+
+ENTRYPOINT ["java", "-jar", "hiring-process-7.jar"]
