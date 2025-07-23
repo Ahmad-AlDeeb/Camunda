@@ -3,12 +3,22 @@ server:
 spring:
   application:
     name: hiring-process-7
+  datasource:
+    url: jdbc:postgresql://localhost:5432/
+    username: postgres
+    password: postgres
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
 # Camunda
 camunda.bpm:
   admin-user:
     id: a
     password: a
   deployment-resource-pattern: "classpath*:/bpmn/*.bpmn,classpath*:/form/*.form"
+  database:
+    type: postgres
+    schema-update: true
 sendgrid:
     api-key: ${SENDGRID_API_KEY}
     from-email: ahmad.aldeeb@qeema.net
